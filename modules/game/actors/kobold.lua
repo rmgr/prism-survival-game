@@ -10,5 +10,6 @@ prism.registerActor("Kobold", function()
 		prism.components.KoboldController(),
 		prism.components.Health(3),
 		prism.components.Attacker(1),
+		prism.components.BelongsToFaction({ "KoboldFaction" }),
 	})
 end)

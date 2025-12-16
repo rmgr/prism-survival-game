@@ -7,6 +7,8 @@ prism.loadModule("prism/extra/sight")
 prism.loadModule("prism/extra/log")
 prism.loadModule("modules/game")
 
+require("game")
+
 -- Used by Geometer for new maps
 prism.defaultCell = prism.cells.Pit
 
@@ -24,8 +26,20 @@ local manager = spectrum.StateManager()
 
 -- we put out levelstate on top here, but you could create a main menu
 --- @diagnostic disable-next-line
-function love.load()
+function love.load(args)
 	manager:push(spectrum.gamestates.GameMenuState(display))
+
 	manager:hook()
 	spectrum.Input:hook()
+end
+
+function love.quit()
+	if Game.lost then
+		love.filesystem.remove("save.lz4")
+		return
+	end
+	local save = Game:serialize()
+	local mp = prism.messagepack.pack(save)
+	local lz = love.data.compress("string", "lz4", mp)
+	love.filesystem.write("save.lz4", lz)
 end

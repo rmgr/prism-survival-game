@@ -13,7 +13,7 @@ function FindEnemyBehaviour:run(level, actor, controller)
 		return false
 	end
 
-	local player = senses:query(level, prism.components.PlayerController):first()
+	local player = senses:query(level, prism.components.Controller):relation(actor, prism.relations.FoeRelation):first()
 	if not player then
 		return false
 	end

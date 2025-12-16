@@ -8,7 +8,8 @@ local MoveBehaviour = prism.BehaviorTree.Node:extend("MoveBehaviour")
 --- @return Action|boolean
 function MoveBehaviour:run(level, actor, controller)
 	local senses = actor:get(prism.components.Senses)
-	local player = senses:query(level, prism.components.PlayerController):first()
+	local player =
+		senses:query(level, prism.components.PlayerController):relation(actor, prism.relations.FoeRelation):first()
 
 	if not player then
 		return false

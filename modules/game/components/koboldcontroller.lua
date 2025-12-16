@@ -2,12 +2,12 @@
 --- @overload fun() : KoboldController
 local KoboldController = prism.components.Controller:extend("KoboldController")
 local BT = prism.BehaviorTree
-local tree
 
 function KoboldController:__new()
-	tree = BT.Root({
+	self.tree = BT.Root({
 		BT.Selector({
 			-- Either,
+			prism.behaviours.AdoreBehaviour(),
 			BT.Sequence({
 				prism.behaviours.HPBelowPercentageCheckBehaviour(34),
 				prism.behaviours.FleeBehaviour(),
@@ -27,7 +27,11 @@ function KoboldController:__new()
 end
 
 function KoboldController:act(level, actor)
-	return tree:run(level, actor, self)
+	-- Initialize tree if it doesn't exist (e.g., after loading from save)
+	if not self.tree then
+		self:__new()
+	end
+	return self.tree:run(level, actor, self)
 end
 
 return KoboldController

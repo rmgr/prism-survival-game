@@ -4,39 +4,49 @@ local controls = require("controls")
 --- A custom game level state responsible for initializing the level map,
 --- handling input, and drawing the state to the screen.
 ---
---- @overload fun(display: Display): GameLevelState
+--- @overload fun(display: Display, builder: LevelBuilder, seed: string): GameLevelState
+--- @overload fun(display: Display, level: Level): GameLevelState
 local GameLevelState = spectrum.gamestates.LevelState:extend("GameLevelState")
 
 --- @param display Display
-function GameLevelState:__new(display)
-	-- Construct a simple test map using MapBuilder.
-	-- In a complete game, you'd likely extract this logic to a separate module
-	-- and pass in an existing player object between levels.
-	local builder = prism.LevelBuilder()
+--- @param builderOrLevel LevelBuilder|Level
+--- @param seed? string
+function GameLevelState:__new(display, builderOrLevel, seed)
+	local level
 
-	builder:rectangle("line", 0, 0, 32, 32, prism.cells.Wall)
-	-- Fill the interior with floor tiles
-	builder:rectangle("fill", 1, 1, 31, 31, prism.cells.Floor)
-	-- Add a small block of walls within the map
-	builder:rectangle("fill", 5, 5, 7, 7, prism.cells.Wall)
-	-- Add a pit area to the southeast
-	builder:rectangle("fill", 20, 20, 25, 25, prism.cells.Pit)
-
-	-- Place the player character at a starting location
-	builder:addActor(prism.actors.Player(), 12, 12)
-
-	-- Add systems
-	builder:addSystems(prism.systems.SensesSystem(), prism.systems.SightSystem(), prism.systems.FallSystem())
+	-- Check if we're loading a saved level or building a new one
+	if prism.Level:is(builderOrLevel) then
+		-- Loading a saved game - builderOrLevel is a Level
+		level = builderOrLevel
+	else
+		-- Building a new level - builderOrLevel is a LevelBuilder
+		local builder = builderOrLevel
+		builder:addSeed(seed)
+		builder:addSystems(
+			prism.systems.SensesSystem(),
+			prism.systems.SightSystem(),
+			prism.systems.FallSystem(),
+			prism.systems.FactionSystem(Game.factions)
+		)
+		level = builder:build(prism.cells.Wall)
+	end
 
 	-- Initialize with the created level and display, the heavy lifting is done by
 	-- the parent class.
-	self.super.__new(self, builder:build(prism.cells.Wall), display)
+	self.super.__new(self, level, display)
 end
 
 function GameLevelState:handleMessage(message)
 	self.super.handleMessage(self, message)
 	if prism.messages.LoseMessage:is(message) then
 		self.manager:enter(spectrum.gamestates.GameOverState(self.display))
+	end
+
+	if prism.messages.DescendMessage:is(message) then
+		--- @cast message DescendMessage
+		self.manager:enter(
+			spectrum.gamestates.GameLevelState(self.display, Game:generateNextFloor(), Game:getLevelSeed())
+		)
 	end
 	-- Handle any messages sent to the level state from the level. LevelState
 	-- handles a few built-in messages for you, like the decision you fill out
@@ -49,17 +59,28 @@ end
 -- updateDecision is called whenever there's an ActionDecision to handle.
 function GameLevelState:updateDecision(dt, owner, decision)
 	-- Controls need to be updated each frame.
+	Game.level = self.level
 	controls:update()
 
 	-- Controls are accessed directly via table index.
 	if controls.move.pressed then
 		local destination = owner:getPosition() + controls.move.vector
+
+		-- Check for stairs FIRST, before trying to move
+		local descendTarget = self.level:query(prism.components.Stair):at(destination:decompose()):first()
+		local descend = prism.actions.Descend(owner, descendTarget)
+		if self:setAction(descend) then
+			return
+		end
+
+		-- If no stairs, try to move
 		local move = prism.actions.Move(owner, destination)
 		if self:setAction(move) then
 			return
 		end
-		local target = self.level:query():at(destination:decompose()):first()
 
+		-- If can't move, try to kick
+		local target = self.level:query():at(destination:decompose()):first()
 		local kick = prism.actions.Kick(owner, target)
 		self:setAction(kick)
 	end
@@ -96,6 +117,7 @@ function GameLevelState:draw()
 	if health then
 		self.display:print(1, 1, "HP: " .. health.hp .. "/" .. health.maxHP)
 	end
+	self.display:print(1, 2, "Depth: " .. Game.depth)
 
 	local log = player:get(prism.components.Log)
 	if log then

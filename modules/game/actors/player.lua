@@ -10,5 +10,6 @@ prism.registerActor("Player", function()
 		prism.components.Mover({ "walk" }),
 		prism.components.Health(10),
 		prism.components.Log(),
+		prism.components.BelongsToFaction({ "PlayerFaction" }),
 	})
 end)
