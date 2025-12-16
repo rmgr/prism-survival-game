@@ -5,6 +5,7 @@ prism.loadModule("prism/spectrum")
 prism.loadModule("prism/geometer")
 prism.loadModule("prism/extra/sight")
 prism.loadModule("prism/extra/log")
+prism.loadModule("modules/faction")
 prism.loadModule("modules/game")
 
 require("game")
