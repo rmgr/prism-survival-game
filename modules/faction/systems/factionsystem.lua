@@ -57,6 +57,7 @@ function FactionSystem:onActorAdded(level, actor)
 	local belongsToFaction = actor:get(prism.components.BelongsToFaction)
 	if belongsToFaction then
 		self:linkActorToFactions(level, actor)
+		self:updateActorRelationships(level)
 	end
 end
 
