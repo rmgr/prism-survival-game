@@ -18,8 +18,8 @@ function Game:__new(seed)
 
 	-- Initialize factions once
 	self.factions = {
-		PlayerFaction = prism.actors.PlayerFaction(),
-		KoboldFaction = prism.actors.KoboldFaction(),
+		PlayerFaction = prism.factions.PlayerFaction(),
+		KoboldFaction = prism.factions.KoboldFaction(),
 	}
 
 	-- Establish initial faction relationships
