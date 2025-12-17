@@ -7,7 +7,26 @@ prism.registerActor("Kobold", function()
 		prism.components.Senses(),
 		prism.components.Sight({ range = 12, fov = true }),
 		prism.components.Mover({ "walk" }),
-		prism.components.KoboldController(),
+		prism.components.BTController(prism.BehaviorTree.Root({
+			prism.BehaviorTree.Selector({
+				-- Either,
+				prism.behaviours.AdoreBehaviour(),
+				prism.BehaviorTree.Sequence({
+					prism.behaviours.HPBelowPercentageCheckBehaviour(34),
+					prism.behaviours.FleeBehaviour(),
+				}),
+				prism.BehaviorTree.Sequence({
+					-- if Enemy in range, attack it.
+					prism.behaviours.CheckEnemyInRangeBehaviour(1),
+					prism.behaviours.AttackBehaviour(),
+				}),
+				-- Move
+				prism.behaviours.MoveBehaviour(),
+				-- Or finally, wait
+				-- We need this here to catch the case where we can't move or attack
+				prism.behaviours.WaitBehaviour(),
+			}),
+		})),
 		prism.components.Health(3),
 		prism.components.Attacker(1),
 		prism.components.BelongsToFaction({ "KoboldFaction" }),
