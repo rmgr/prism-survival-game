@@ -4,7 +4,7 @@ prism.registerActor("Chest", function(contents)
 		prism.components.Name("Chest"),
 		prism.components.Position(),
 		inventory,
-		prism.components.Drawable({ "(", prism.Color4.YELLOW }),
+		prism.components.Drawable({ index = "(", color = prism.Color4.YELLOW }),
 		prism.components.Container(),
 		prism.components.Collider(),
 	})
