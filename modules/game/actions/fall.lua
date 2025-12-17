@@ -7,7 +7,11 @@ function Fall:perform(level)
 end
 
 function Fall:canPerform(level)
-	local x, y = self.owner:getPosition():decompose()
+	local position = self.owner:getPosition()
+	if not position then
+		return false
+	end
+	local x, y = position:decompose()
 	local cell = level:getCell(x, y)
 	if not cell:has(prism.components.Void) then
 		return false

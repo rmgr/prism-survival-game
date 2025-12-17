@@ -66,7 +66,15 @@ function GameLevelState:updateDecision(dt, owner, decision)
 	if controls.move.pressed then
 		local destination = owner:getPosition() + controls.move.vector
 
-		-- Check for stairs FIRST, before trying to move
+		-- Check for chest FIRST, before trying to descend
+		local openable = self.level:query(prism.components.Container):at(destination:decompose()):first()
+
+		local openContainer = prism.actions.OpenContainer(owner, openable)
+		if self:setAction(openContainer) then
+			return
+		end
+
+		-- Check for stairs, before trying to move
 		local descendTarget = self.level:query(prism.components.Stair):at(destination:decompose()):first()
 		local descend = prism.actions.Descend(owner, descendTarget)
 		if self:setAction(descend) then
@@ -83,6 +91,23 @@ function GameLevelState:updateDecision(dt, owner, decision)
 		local target = self.level:query():at(destination:decompose()):first()
 		local kick = prism.actions.Kick(owner, target)
 		self:setAction(kick)
+	end
+
+	if controls.inventory.pressed then
+		local inventory = owner:get(prism.components.Inventory)
+		if inventory then
+			local inventoryState = spectrum.gamestates.InventoryState(self.display, decision, self.level, inventory)
+			self.manager:push(inventoryState)
+		end
+	end
+
+	if controls.pickup.pressed then
+		local target = self.level:query(prism.components.Item):at(owner:getPosition():decompose()):first()
+
+		local pickup = prism.actions.Pickup(owner, target)
+		if self:setAction(pickup) then
+			return
+		end
 	end
 
 	if controls.wait.pressed then

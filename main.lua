@@ -7,6 +7,8 @@ prism.loadModule("prism/extra/sight")
 prism.loadModule("prism/extra/log")
 prism.loadModule("modules/faction")
 prism.loadModule("modules/game")
+prism.loadModule("prism/extra/inventory")
+prism.loadModule("prism/extra/droptable")
 
 require("game")
 

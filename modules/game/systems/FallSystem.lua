@@ -5,4 +5,8 @@ function FallSystem:onMove(level, actor)
 	level:tryPerform(prism.actions.Fall(actor))
 end
 
+function FallSystem:onActorAdded(level, actor)
+	level:tryPerform(prism.actions.Fall(actor))
+end
+
 return FallSystem

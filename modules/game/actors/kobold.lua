@@ -11,5 +11,9 @@ prism.registerActor("Kobold", function()
 		prism.components.Health(3),
 		prism.components.Attacker(1),
 		prism.components.BelongsToFaction({ "KoboldFaction" }),
+		prism.components.DropTable({
+			chance = 0.3,
+			entry = prism.actors.MeatBrick(),
+		}),
 	})
 end)

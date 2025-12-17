@@ -18,7 +18,10 @@ return spectrum.Input.Controls({
       restart        = "r",
       quit           = "q",
       play           = "p",
-      load           = "l"
+      load           = "l",
+      inventory      = "i",
+      back           = "escape",
+      pickup         = "g"
    },
 	-- Pairs are controls that map to either 4 or 8 directions.
 	-- With only 4 directions, the order is up, left, right, down.
