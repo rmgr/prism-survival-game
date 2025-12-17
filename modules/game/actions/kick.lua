@@ -23,34 +23,9 @@ function Kick:perform(level, kicked)
 	local direction = (kicked:getPosition() - self.owner:getPosition())
 
 	-- DEBUG: Flip faction relationship to friendly
-	local playerFaction = nil
-	local koboldFaction = nil
-
-	for factionActor in level:query(prism.components.Faction):iter() do
-		local name = prism.components.Name.get(factionActor)
-		if name == "PlayerFaction" then
-			playerFaction = factionActor
-		elseif name == "KoboldFaction" then
-			koboldFaction = factionActor
-		end
-	end
-
-	if playerFaction and koboldFaction then
-		-- Update PlayerFaction -> KoboldFaction relationship
-		local relations1 = playerFaction:getRelations(prism.relations.FactionRelationshipRelation)
-		local relationship1 = relations1[koboldFaction]
-		---@cast relationship1 FactionRelationshipRelation
-
-		-- Update KoboldFaction -> PlayerFaction relationship (the inverse)
-		local relations2 = koboldFaction:getRelations(prism.relations.FactionRelationshipRelation)
-		local relationship2 = relations2[playerFaction]
-		---@cast relationship2 FactionRelationshipRelation
-
-		if relationship1 and relationship2 then
-			relationship1.strength = 100
-			relationship2.strength = 100
-		end
-	end
+	local changeRelationship =
+		prism.actions.ChangeFactionRelationship(self.owner, "PlayerFaction", "KoboldFaction", 200)
+	level:tryPerform(changeRelationship)
 
 	local final = kicked:expectPosition()
 	for _ = 1, 3 do

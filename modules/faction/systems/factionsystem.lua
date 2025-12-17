@@ -26,6 +26,9 @@ function FactionSystem:postInitialize(level)
 	for actor in level:query(prism.components.BelongsToFaction):iter() do
 		self:linkActorToFactions(level, actor)
 	end
+
+	-- Apply Friend/Foe relations based on initial faction relationships
+	self:updateActorRelationships(level)
 end
 
 ---@param level Level
@@ -59,8 +62,11 @@ end
 
 ---@param level Level
 ---@param actor Actor
-function FactionSystem:onTurn(level, actor)
-	self:updateActorRelationships(level)
+---@param action Action
+function FactionSystem:afterAction(level, actor, action)
+	if prism.actions.ChangeFactionRelationship:is(action) then
+		self:updateActorRelationships(level)
+	end
 end
 
 ---@param level Level
