@@ -1,4 +1,4 @@
---- @class AttackBehaviour : Object, IBehavior
+--- @class AttackBehaviour : BehaviorTree.Node
 local AttackBehaviour = prism.BehaviorTree.Node:extend("AttackBehaviour")
 
 --- @param self BehaviorTree.Node
@@ -7,12 +7,7 @@ local AttackBehaviour = prism.BehaviorTree.Node:extend("AttackBehaviour")
 --- @param controller Controller
 --- @return Action | boolean
 function AttackBehaviour:run(level, actor, controller)
-	local senses = actor:get(prism.components.Senses)
-	if not senses then
-		return false
-	end
-
-	local player = senses:query(level, prism.components.PlayerController):first()
+	local player = controller.blackboard["target"]
 
 	if not player then
 		return false

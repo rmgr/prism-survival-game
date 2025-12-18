@@ -1,44 +1,35 @@
---- @class FleeBehaviour : Object, IBehavior
+--- @class FleeBehaviour : BehaviorTree.Node
+--- @field distance number
 local FleeBehaviour = prism.BehaviorTree.Node:extend("FleeBehaviour")
+
+--- @param distance number|nil Distance to flee (default: 3)
+function FleeBehaviour:__new(distance)
+	self.distance = distance or 3
+end
 
 --- @param self BehaviorTree.Node
 --- @param level Level
 --- @param actor Actor
 --- @param controller Controller
---- @return Action|boolean
+--- @return boolean
 function FleeBehaviour:run(level, actor, controller)
-	local senses = actor:get(prism.components.Senses)
-	if not senses then
+	-- Read the enemy target from blackboard (set by FindEnemyBehaviour)
+	local enemy = controller.blackboard["target"]
+	if not enemy then
 		return false
 	end
 
-	local player = senses:query(level, prism.components.PlayerController):first()
-	if not player then
-		return false
-	end
+	-- Handle both Actor and Position targets
+	local enemyPos = prism.Actor:is(enemy) and enemy:getPosition() or enemy
 
-	local mover = actor:get(prism.components.Mover)
-	if not mover then
-		return false
-	end
+	-- Calculate flee position: opposite direction from enemy
+	local direction = (actor:getPosition() - enemyPos):normalize()
+	local fleeTarget = actor:getPosition() + (direction * self.distance)
 
-	local direction = (actor:getPosition() - player:getPosition()):normalize()
-	local targetPos = actor:getPosition() + (direction * 3)
+	-- Store flee position in blackboard for MoveBehaviour to use
+	controller.blackboard["target"] = fleeTarget
 
-	local path = level:findPath(actor:getPosition(), targetPos, actor, mover.mask, 1)
-
-	if not path then
-		return false
-	end
-
-	local nextStep = path:pop()
-	local move = prism.actions.Move(actor, nextStep)
-
-	if level:canPerform(move) then
-		return move
-	end
-
-	return false
+	return true
 end
 
 return FleeBehaviour

@@ -8,24 +8,28 @@ prism.registerActor("Kobold", function()
 		prism.components.Sight({ range = 12, fov = true }),
 		prism.components.Mover({ "walk" }),
 		prism.components.BTController(prism.BehaviorTree.Root({
-			prism.BehaviorTree.Selector({
-				-- Either,
-				prism.behaviours.AdoreBehaviour(),
-				prism.BehaviorTree.Sequence({
-					prism.behaviours.HPBelowPercentageCheckBehaviour(34),
-					prism.behaviours.FleeBehaviour(),
+			prism.BehaviorTree.Sequence({
+				prism.behaviours.FindEnemyBehaviour(),
+				prism.BehaviorTree.Selector({
+					-- Either,
+					prism.BehaviorTree.Sequence({
+						prism.behaviours.HPBelowPercentageCheckBehaviour(34),
+						prism.behaviours.FleeBehaviour(),
+						prism.behaviours.MoveBehaviour(),
+					}),
+					prism.BehaviorTree.Sequence({
+						-- if Enemy in range, attack it.
+						prism.behaviours.CheckEnemyInRangeBehaviour(1),
+						prism.behaviours.AttackBehaviour(),
+					}),
+					-- Move
+					prism.behaviours.MoveBehaviour(),
+					-- Or finally, wait
+					-- We need this here to catch the case where we can't move or attack
+					prism.behaviours.WaitBehaviour(),
 				}),
-				prism.BehaviorTree.Sequence({
-					-- if Enemy in range, attack it.
-					prism.behaviours.CheckEnemyInRangeBehaviour(1),
-					prism.behaviours.AttackBehaviour(),
-				}),
-				-- Move
-				prism.behaviours.MoveBehaviour(),
-				-- Or finally, wait
-				-- We need this here to catch the case where we can't move or attack
-				prism.behaviours.WaitBehaviour(),
 			}),
+			prism.behaviours.WaitBehaviour(),
 		})),
 		prism.components.Health(3),
 		prism.components.Attacker(1),

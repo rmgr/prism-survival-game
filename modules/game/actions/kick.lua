@@ -22,10 +22,12 @@ local mask = prism.Collision.createBitmaskFromMovetypes({ "fly" })
 function Kick:perform(level, kicked)
 	local direction = (kicked:getPosition() - self.owner:getPosition())
 
+	--[[
 	-- DEBUG: Flip faction relationship to friendly
 	local changeRelationship =
 		prism.actions.ChangeFactionRelationship(self.owner, "PlayerFaction", "KoboldFaction", 200)
 	level:tryPerform(changeRelationship)
+   ]]
 
 	local final = kicked:expectPosition()
 	for _ = 1, 3 do

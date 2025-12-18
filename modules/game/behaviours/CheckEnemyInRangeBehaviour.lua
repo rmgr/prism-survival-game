@@ -1,4 +1,4 @@
---- @class CheckEnemyInRangeBehaviour : Object, IBehavior
+--- @class CheckEnemyInRangeBehaviour : BehaviorTree.Node
 --- @field range number
 local CheckEnemyInRangeBehaviour = prism.BehaviorTree.Node:extend("CheckEnemyInRangeBehaviour")
 
@@ -13,18 +13,13 @@ end
 --- @param controller Controller
 --- @return boolean
 function CheckEnemyInRangeBehaviour:run(level, actor, controller)
-	local senses = actor:get(prism.components.Senses)
-	if not senses then
-		return false
-	end
-
-	local player = senses:query(level, prism.components.PlayerController):first()
-	if not player then
+	local target = controller.blackboard["target"]
+	if not target then
 		return false
 	end
 
 	-- Check if player is within specified range
-	local distance = actor:getPosition():distance(player:getPosition())
+	local distance = actor:getPosition():distance(target:getPosition())
 	return distance <= self.range
 end
 

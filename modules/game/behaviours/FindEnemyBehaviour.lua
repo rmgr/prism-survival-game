@@ -1,4 +1,4 @@
---- @class FindEnemyBehaviour : Object, IBehavior
+--- @class FindEnemyBehaviour : BehaviorTree.Node
 local FindEnemyBehaviour = prism.BehaviorTree.Node:extend("FindEnemyBehaviour")
 
 --- @param self BehaviorTree.Node
@@ -12,11 +12,14 @@ function FindEnemyBehaviour:run(level, actor, controller)
 	if not senses then
 		return false
 	end
-
-	local player = senses:query(level, prism.components.Controller):relation(actor, prism.relations.FoeRelation):first()
-	if not player then
+	local voids = level:query(prism.components.Void)
+	print(#voids)
+	local target = senses:query(level, prism.components.Controller):relation(actor, prism.relations.FoeRelation):first()
+	if not target then
 		return false
 	end
+
+	controller.blackboard["target"] = target
 
 	return true
 end

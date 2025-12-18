@@ -1,5 +1,11 @@
---- @class MoveBehaviour : Object, IBehavior
+--- @class MoveBehaviour : BehaviorTree.Node
+--- @field minDistance number
 local MoveBehaviour = prism.BehaviorTree.Node:extend("MoveBehaviour")
+
+--- @param minDistance number|nil
+function MoveBehaviour:__new(minDistance)
+	self.minDistance = minDistance or 1
+end
 
 --- @param self BehaviorTree.Node
 --- @param level Level
@@ -7,12 +13,14 @@ local MoveBehaviour = prism.BehaviorTree.Node:extend("MoveBehaviour")
 --- @param controller Controller
 --- @return Action|boolean
 function MoveBehaviour:run(level, actor, controller)
-	local senses = actor:get(prism.components.Senses)
-	local player =
-		senses:query(level, prism.components.PlayerController):relation(actor, prism.relations.FoeRelation):first()
-
-	if not player then
+	local target = controller.blackboard["target"]
+	if not target then
 		return false
+	end
+
+	-- Handle both Actor and Position targets
+	if prism.Actor:is(target) then
+		target = target:getPosition()
 	end
 
 	local mover = actor:get(prism.components.Mover)
@@ -20,7 +28,7 @@ function MoveBehaviour:run(level, actor, controller)
 		return false
 	end
 
-	local path = level:findPath(actor:getPosition(), player:getPosition(), actor, mover.mask, 1)
+	local path = level:findPath(actor:getPosition(), target, actor, mover.mask, self.minDistance)
 
 	if not path then
 		return false

@@ -1,4 +1,4 @@
---- @class HPBelowPercentageCheckBehaviour : Object, IBehavior
+--- @class HPBelowPercentageCheckBehaviour : BehaviorTree.Node
 --- @field percentage number
 local HPBelowPercentageCheckBehaviour = prism.BehaviorTree.Node:extend("HPBelowPercentageCheckBehaviour")
 
