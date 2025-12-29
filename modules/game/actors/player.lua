@@ -14,5 +14,6 @@ prism.registerActor("Player", function()
 		prism.components.Inventory({
 			limitCount = 26,
 		}),
+		prism.components.ConditionHolder(),
 	})
 end)
