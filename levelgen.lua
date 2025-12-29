@@ -1,5 +1,7 @@
+local DEBUG = false
+
 local PARTITIONS = 3
-local chestloot = require("loot/chest")
+local chestloot = require("loot.chest")
 
 --- @param rng RNG
 --- @param player Actor
@@ -10,6 +12,23 @@ return function(rng, player, width, height, builder)
 	if not builder then
 		builder = prism.LevelBuilder(prism.cells.Wall)
 	end
+
+	-- Debug: Use a simple test map instead of procedural generation
+	if DEBUG then
+		builder:rectangle("line", 0, 0, 32, 32, prism.cells.Wall)
+		-- Fill the interior with floor tiles
+		builder:rectangle("fill", 1, 1, 31, 31, prism.cells.Floor)
+		-- Add a small block of walls within the map
+		builder:rectangle("fill", 5, 5, 7, 7, prism.cells.Wall)
+		-- Add a pit area to the southeast
+		builder:rectangle("fill", 20, 20, 25, 25, prism.cells.Pit)
+
+		-- Place the player character at a starting location
+		builder:addActor(player, 12, 12)
+
+		return builder
+	end
+
 	-- Fill the map with random noise of pits and walls.
 	local nox, noy = rng:random(1, 10000), rng:random(1, 10000)
 	for x = 1, width do
@@ -38,7 +57,7 @@ return function(rng, player, width, height, builder)
 				local roomRect = prism.Rectangle(x, y, rw, rh)
 				rooms[prism.Vector2._hash(px, py)] = roomRect
 
-				builder:rectangle("fill", x, y, x + rw, y + rh, prism.cells.Floor)
+				builder:rectangle("fill", x, y, x + rw, y + rh, prism.cells.Grass)
 			end
 		end
 	end
@@ -55,11 +74,11 @@ return function(rng, player, width, height, builder)
 		local bx, by = b:center():floor():decompose()
 		-- Randomly choose one of two L-shaped tunnel patterns for variety.
 		if rng:random() > 0.5 then
-			builder:line(ax, ay, bx, ay, prism.cells.Floor)
-			builder:line(bx, ay, bx, by, prism.cells.Floor)
+			builder:line(ax, ay, bx, ay, prism.cells.Grass)
+			builder:line(bx, ay, bx, by, prism.cells.Grass)
 		else
-			builder:line(ax, ay, ax, by, prism.cells.Floor)
-			builder:line(ax, by, bx, by, prism.cells.Floor)
+			builder:line(ax, ay, ax, by, prism.cells.Grass)
+			builder:line(ax, by, bx, by, prism.cells.Grass)
 		end
 	end
 

@@ -26,7 +26,10 @@ function GameLevelState:__new(display, builderOrLevel, seed)
 			prism.systems.SensesSystem(),
 			prism.systems.SightSystem(),
 			prism.systems.FallSystem(),
-			prism.systems.FactionSystem(Game.factions)
+			prism.systems.FactionSystem(Game.factions),
+			prism.systems.DiffusionSystem(),
+			prism.systems.FireSystem(seed),
+			prism.systems.TickSystem()
 		)
 		level = builder:build(prism.cells.Wall)
 	end
@@ -140,7 +143,7 @@ function GameLevelState:draw()
 	local health = player:get(prism.components.Health)
 
 	if health then
-		self.display:print(1, 1, "HP: " .. health.hp .. "/" .. health.maxHP)
+		self.display:print(1, 1, "HP: " .. health.hp .. "/" .. health:getMaxHP())
 	end
 	self.display:print(1, 2, "Depth: " .. Game.depth)
 
@@ -158,8 +161,8 @@ function GameLevelState:draw()
 	-- offset it for custom non-terminal UI elements. If you do scale the UI
 	-- just remember that display:getCellUnderMouse expects the mouse in the
 	-- display's local pixel coordinates
+	self.display:print(1, 3, "Current FPS: " .. tostring(love.timer.getFPS()))
 	self.display:draw()
-
 	-- custom love2d drawing goes here!
 end
 
