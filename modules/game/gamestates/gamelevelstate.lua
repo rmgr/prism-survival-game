@@ -25,12 +25,16 @@ function GameLevelState:__new(display, builderOrLevel, seed)
 		builder:addSystems(
 			prism.systems.SensesSystem(),
 			prism.systems.SightSystem(),
+			prism.systems.ScentSystem(),
 			prism.systems.FallSystem(),
 			prism.systems.FactionSystem(Game.factions),
 			prism.systems.DiffusionSystem(),
 			prism.systems.FireSystem(seed),
 			prism.systems.TickSystem()
 		)
+		local scentManager = prism.Actor()
+		scentManager:give(prism.components.ScentManager())
+		builder:addActor(scentManager)
 		level = builder:build(prism.cells.Wall)
 	end
 

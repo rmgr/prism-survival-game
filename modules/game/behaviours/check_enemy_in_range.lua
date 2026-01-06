@@ -18,8 +18,11 @@ function CheckEnemyInRangeBehaviour:run(level, actor, controller)
 		return false
 	end
 
+	if prism.Actor:is(target) then
+		target = target:getPosition()
+	end
 	-- Check if player is within specified range
-	local distance = actor:getPosition():distance(target:getPosition())
+	local distance = actor:getPosition():distance(target)
 	return distance <= self.range
 end
 

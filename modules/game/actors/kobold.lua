@@ -7,6 +7,8 @@ prism.registerActor("Kobold", function()
 		prism.components.Senses(),
 		prism.components.Sight({ range = 12, fov = true }),
 		prism.components.Mover({ "walk" }),
+		prism.components.Smell({ threshold = 20 }),
+		prism.components.Scent({ strength = 20 }),
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Sequence({
 				prism.behaviours.FindEnemyBehaviour(),

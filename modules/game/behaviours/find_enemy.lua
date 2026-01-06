@@ -12,8 +12,6 @@ function FindEnemyBehaviour:run(level, actor, controller)
 	if not senses then
 		return false
 	end
-	local voids = level:query(prism.components.Void)
-	print(#voids)
 	local target = senses:query(level, prism.components.Controller):relation(actor, prism.relations.FoeRelation):first()
 	if not target then
 		return false

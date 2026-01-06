@@ -15,5 +15,6 @@ prism.registerActor("Player", function()
 			limitCount = 26,
 		}),
 		prism.components.ConditionHolder(),
+		prism.components.Scent({ strength = 30 }),
 	})
 end)
