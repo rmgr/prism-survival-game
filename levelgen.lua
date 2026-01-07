@@ -259,8 +259,8 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 	end
 	local enemies = {
 		nil,
-		--		prism.actors.Kobold,
-		--		prism.actors.Olm,
+		prism.actors.Kobold,
+		prism.actors.Olm,
 	}
 	local enemyToPlace = enemies[rng:random(1, #enemies)]
 	if enemyToPlace ~= nil then
@@ -271,7 +271,8 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 				local rect = prism.Rectangle(room.x, room.y, room.w, room.h)
 				local corners = rect:toCorners()
 				local randCorner = corners[rng:random(1, #corners)]
-				builder:addActor(actor, randCorner.x, randCorner.y)
+
+				builder:addActor(actor, randCorner.x, randCorner.y - 1)
 			end
 		elseif actor:has(prism.components.Kobold) then
 			builder:addActor(actor, room.centerX, room.centerY)

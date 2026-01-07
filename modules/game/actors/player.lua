@@ -1,7 +1,7 @@
 prism.registerActor("Player", function()
 	return prism.Actor.fromComponents({
 		prism.components.Name("Player"),
-		prism.components.Drawable({ index = "@", color = prism.Color4.GREEN, layer = math.huge }),
+		prism.components.Drawable({ index = "@", color = prism.Color4.BLUE, layer = math.huge - 10 }),
 		prism.components.Position(),
 		prism.components.Collider(),
 		prism.components.PlayerController(),

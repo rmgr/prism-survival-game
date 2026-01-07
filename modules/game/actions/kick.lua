@@ -38,6 +38,9 @@ function Kick:perform(level, kicked)
 		final = nextpos
 	end
 
+	level:yield(prism.messages.AnimationMessage({
+		animation = spectrum.animations.Attack(self.owner, kicked:getPosition()),
+	}))
 	level:moveActor(kicked, final)
 	local damage = prism.actions.Damage(kicked, 1)
 	level:tryPerform(damage)

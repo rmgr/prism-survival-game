@@ -12,6 +12,7 @@ function EmitSound:perform(level, volume)
 	end
 	local originX, originY = position:decompose()
 	local isPlayer = self.owner:has(prism.components.PlayerController)
+	local animated = false
 	if isPlayer then
 		level:yield(prism.messages.SkipAnimationsMessage())
 		level:yield(prism.messages.AnimationMessage({
@@ -35,7 +36,7 @@ function EmitSound:perform(level, volume)
 
 		local actor = level:query(prism.components.Hearing):at(cx, cy):first()
 
-		if actor then
+		if actor and actor ~= self.owner then
 			actor:addRelation(prism.relations.HearsRelation, self.owner)
 		end
 

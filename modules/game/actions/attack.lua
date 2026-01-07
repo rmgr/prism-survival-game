@@ -20,6 +20,9 @@ function Attack:perform(level, attacked)
 	local ownerName = Name.lower(self.owner)
 	local dealt = damage.dealt or 0
 
+	level:yield(prism.messages.AnimationMessage({
+		animation = spectrum.animations.Attack(self.owner, attacked:getPosition()),
+	}))
 	Log.addMessage(self.owner, "You attack the %s for %i damage!", attackName, dealt)
 	Log.addMessage(attacked, "The %s attacks you for %i damage!", ownerName, dealt)
 	Log.addMessageSensed(level, self, "The %s attacks the %s for %i damage!", ownerName, attackName, dealt)
