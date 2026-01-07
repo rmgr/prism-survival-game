@@ -235,7 +235,7 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 	local noiseOffsetX = rng:random(1, 10000)
 	local noiseOffsetY = rng:random(1, 10000)
 	local noiseScale = 3
-	local noiseThreshold = 0.4
+	local noiseThreshold = 0.6
 
 	for _x = roomX, roomX + roomW - 1 do
 		for _y = roomY, roomY + roomH - 1 do
@@ -249,8 +249,10 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 				local noise = love.math.perlinNoise(_x / noiseScale + noiseOffsetX, _y / noiseScale + noiseOffsetY)
 				if noise > noiseThreshold then
 					builder:set(_x, _y, prism.cells.Floor())
-				else
+				elseif noise < noiseThreshold and noise > 0.4 then
 					builder:set(_x, _y, prism.cells.Grass())
+				else
+					builder:set(_x, _y, prism.cells.Gravel())
 				end
 			end
 		end

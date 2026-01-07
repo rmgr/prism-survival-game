@@ -63,6 +63,9 @@ function ScentSystem:canHoldScent(level, x, y)
 	end
 
 	local cell = level:getCell(x, y)
+	if not cell then
+		return false
+	end
 	local collider = cell:get(prism.components.Collider)
 	if not collider then
 		self._passableCache[cacheKey] = false

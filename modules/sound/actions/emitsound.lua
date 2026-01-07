@@ -70,6 +70,9 @@ function EmitSound:canTransmitSound(level, x, y)
 	end
 
 	local cell = level:getCell(x, y)
+	if not cell then
+		return false
+	end
 	local collider = cell:get(prism.components.Collider)
 	if not collider then
 		if self._soundCache then
