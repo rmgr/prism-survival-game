@@ -20,6 +20,7 @@ function Game:__new(seed)
 	self.factions = {
 		PlayerFaction = prism.factions.PlayerFaction(),
 		KoboldFaction = prism.factions.KoboldFaction(),
+		OlmFaction = prism.factions.OlmFaction(),
 	}
 
 	-- Establish initial faction relationships
@@ -27,6 +28,8 @@ function Game:__new(seed)
 		prism.relations.FactionRelationshipRelation(-100),
 		self.factions.KoboldFaction
 	)
+	self.factions.PlayerFaction:addRelation(prism.relations.FactionRelationshipRelation(-100), self.factions.OlmFaction)
+	self.factions.OlmFaction:addRelation(prism.relations.FactionRelationshipRelation(-100), self.factions.KoboldFaction)
 end
 
 --- @return string

@@ -16,5 +16,6 @@ prism.registerActor("Player", function()
 		}),
 		prism.components.ConditionHolder(),
 		prism.components.Scent({ strength = 30 }),
+		prism.components.Hearing(),
 	})
 end)

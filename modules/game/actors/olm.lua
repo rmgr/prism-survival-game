@@ -1,18 +1,18 @@
-prism.register(prism.Component:extend("Kobold"))
-prism.registerActor("Kobold", function()
+prism.register(prism.Component:extend("Olm"))
+prism.registerActor("Olm", function()
 	return prism.Actor.fromComponents({
-		prism.components.Name("Kobold"),
+		prism.components.Name("Olm"),
 		prism.components.Position(),
-		prism.components.Drawable({ index = "k", color = prism.Color4.RED }),
+		prism.components.Drawable({ index = "O", color = prism.Color4.NAVY }),
 		prism.components.Collider(),
 		prism.components.Senses(),
-		prism.components.Sight({ range = 12, fov = true }),
-		prism.components.Mover({ "walk" }),
-		prism.components.Smell({ threshold = 20 }),
+		prism.components.Sight({ range = 1, fov = true }),
 		prism.components.Hearing(),
+		prism.components.Mover({ "walk" }),
 		prism.components.Scent({ strength = 20 }),
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Sequence({
+				prism.behaviours.ListenBehaviour(),
 				prism.behaviours.FindEnemyBehaviour(),
 				prism.BehaviorTree.Selector({
 					-- Either,
@@ -35,13 +35,14 @@ prism.registerActor("Kobold", function()
 			}),
 			prism.behaviours.WaitBehaviour(),
 		})),
-		prism.components.Health(3),
-		prism.components.Attacker(1),
-		prism.components.BelongsToFaction({ "KoboldFaction" }),
+		prism.components.Health(5),
+		prism.components.Attacker(4),
+		prism.components.BelongsToFaction({ "OlmFaction" }),
 		prism.components.DropTable({
 			chance = 0.3,
 			entry = prism.actors.MeatBrick(),
 		}),
-		prism.components.Kobold(),
+		prism.components.Olm(),
+		prism.components.Speed(50),
 	})
 end)

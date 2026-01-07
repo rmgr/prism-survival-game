@@ -40,6 +40,7 @@ function SoundSystem:onSenses(level, actor)
 				actor:addRelation(prism.relations.SensesRelation, soundEmitter)
 			end
 		end
+		--actor:removeAllRelations(prism.relations.HearsRelation)
 	end
 end
 

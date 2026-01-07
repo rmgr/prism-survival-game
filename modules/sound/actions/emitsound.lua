@@ -13,9 +13,11 @@ function EmitSound:perform(level, volume)
 	local originX, originY = position:decompose()
 	local isPlayer = self.owner:has(prism.components.PlayerController)
 	if isPlayer then
+		level:yield(prism.messages.SkipAnimationsMessage())
 		level:yield(prism.messages.AnimationMessage({
 			animation = spectrum.animations.SoundRadiusMarkersExpand(volume, originX, originY),
 			actor = self.owner,
+			skippable = true,
 		}))
 	end
 	-- Initialize cache for this sound propagation

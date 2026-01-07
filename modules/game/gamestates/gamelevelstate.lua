@@ -22,6 +22,7 @@ function GameLevelState:__new(display, builderOrLevel, seed)
 		-- Building a new level - builderOrLevel is a LevelBuilder
 		local builder = builderOrLevel
 		builder:addSeed(seed)
+		builder:addScheduler(prism.schedulers.SpeedScheduler())
 		builder:addSystems(
 			prism.systems.SensesSystem(),
 			prism.systems.SightSystem(),
@@ -50,6 +51,9 @@ function GameLevelState:handleMessage(message)
 		self.manager:enter(spectrum.gamestates.GameOverState(self.display))
 	end
 
+	if prism.messages.SkipAnimationsMessage:is(message) then
+		self.display:skipAnimations()
+	end
 	if prism.messages.DescendMessage:is(message) then
 		--- @cast message DescendMessage
 		self.manager:enter(

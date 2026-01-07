@@ -257,6 +257,26 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 			end
 		end
 	end
+	local enemies = {
+		nil,
+		--		prism.actors.Kobold,
+		--		prism.actors.Olm,
+	}
+	local enemyToPlace = enemies[rng:random(1, #enemies)]
+	if enemyToPlace ~= nil then
+		local actor = enemyToPlace()
+		---@cast actor Actor
+		if actor:has(prism.components.Olm) then
+			if roomShape == "square" then
+				local rect = prism.Rectangle(room.x, room.y, room.w, room.h)
+				local corners = rect:toCorners()
+				local randCorner = corners[rng:random(1, #corners)]
+				builder:addActor(actor, randCorner.x, randCorner.y)
+			end
+		elseif actor:has(prism.components.Kobold) then
+			builder:addActor(actor, room.centerX, room.centerY)
+		end
+	end
 	return room
 end
 function BspGenerator:insideCircle(centerX, centerY, tileX, tileY, radius)

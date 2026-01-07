@@ -34,6 +34,7 @@ display:fitWindowToTerminal()
 --- @type GameStateManager
 local manager = spectrum.StateManager()
 
+love.keyboard.setKeyRepeat(true)
 -- we put out levelstate on top here, but you could create a main menu
 --- @diagnostic disable-next-line
 function love.load(args)
