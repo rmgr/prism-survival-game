@@ -1,5 +1,4 @@
 ---@class ScentSystem : System
----@overload fun(scentManager: ScentManager)
 local ScentSystem = prism.System:extend("ScentSystem")
 
 function ScentSystem:getRequirements()
@@ -13,7 +12,6 @@ function ScentSystem:postInitialize(level)
 	local manager = self:getScentManager(level)
 	if manager then
 		self.scentManager = manager
-		print("init")
 		self:rebuildScentMap(level)
 	end
 end
