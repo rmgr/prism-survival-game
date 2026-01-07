@@ -17,8 +17,12 @@ prism.registerActor("Kobold", function()
 				prism.BehaviorTree.Selector({
 					-- Either,
 					prism.BehaviorTree.Sequence({
+						prism.behaviours.CheckRoomTargetBehaviour(),
+						prism.behaviours.MoveBehaviour(),
+					}),
+					prism.BehaviorTree.Sequence({
 						prism.behaviours.HPBelowPercentageCheckBehaviour(34),
-						prism.behaviours.FleeBehaviour(),
+						prism.behaviours.FindNearestRoomNotContainingEnemyBehaviour(),
 						prism.behaviours.MoveBehaviour(),
 					}),
 					prism.BehaviorTree.Sequence({

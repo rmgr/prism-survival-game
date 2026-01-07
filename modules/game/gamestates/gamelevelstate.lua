@@ -9,9 +9,10 @@ local controls = require("controls")
 local GameLevelState = spectrum.gamestates.LevelState:extend("GameLevelState")
 
 --- @param display Display
---- @param builderOrLevel LevelBuilder|Level
+--- @param builderOrLevel LevelBuilder|LevelWithRooms
+--- @param rooms table
 --- @param seed? string
-function GameLevelState:__new(display, builderOrLevel, seed)
+function GameLevelState:__new(display, builderOrLevel, rooms, seed)
 	local level
 
 	-- Check if we're loading a saved level or building a new one
@@ -38,6 +39,8 @@ function GameLevelState:__new(display, builderOrLevel, seed)
 		scentManager:give(prism.components.ScentManager())
 		builder:addActor(scentManager)
 		level = builder:build(prism.cells.Wall)
+		---@cast level LevelWithRooms
+		level.rooms = rooms
 	end
 
 	-- Initialize with the created level and display, the heavy lifting is done by

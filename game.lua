@@ -38,7 +38,7 @@ function Game:getLevelSeed()
 end
 
 --- @param builder? LevelBuilder
---- @return LevelBuilder builder
+--- @return LevelBuilder builder, table rooms
 function Game:generateNextFloor(builder)
 	self.depth = self.depth + 1
 

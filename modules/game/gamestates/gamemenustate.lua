@@ -32,8 +32,8 @@ function GameMenuState:update(dt)
 		love.event.quit()
 	elseif controls.play.pressed then
 		love.filesystem.remove("save.lz4")
-		local builder = Game:generateNextFloor()
-		self.manager:enter(spectrum.gamestates.GameLevelState(self.display, builder, Game:getLevelSeed()))
+		local builder, rooms = Game:generateNextFloor()
+		self.manager:enter(spectrum.gamestates.GameLevelState(self.display, builder, rooms, Game:getLevelSeed()))
 	elseif controls.load.pressed and self.save then
 		local mp = love.data.decompress("string", "lz4", self.save)
 		local save = prism.Object.deserialize(prism.messagepack.unpack(mp))

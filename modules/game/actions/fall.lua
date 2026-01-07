@@ -13,6 +13,7 @@ function Fall:canPerform(level)
 	end
 	local x, y = position:decompose()
 	local cell = level:getCell(x, y)
+	if not cell then return false end
 	if not cell:has(prism.components.Void) then
 		return false
 	end
