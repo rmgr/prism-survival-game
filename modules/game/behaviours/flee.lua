@@ -14,7 +14,7 @@ end
 --- @return boolean
 function FleeBehaviour:run(level, actor, controller)
 	-- Read the enemy target from blackboard (set by FindEnemyBehaviour)
-	local enemy = controller.blackboard["target"]
+	local enemy = controller.blackboard.short["target"]
 	if not enemy then
 		return false
 	end
@@ -27,7 +27,7 @@ function FleeBehaviour:run(level, actor, controller)
 	local fleeTarget = actor:getPosition() + (direction * self.distance)
 
 	-- Store flee position in blackboard for MoveBehaviour to use
-	controller.blackboard["target"] = fleeTarget
+	controller.blackboard.short["target"] = fleeTarget
 
 	return true
 end

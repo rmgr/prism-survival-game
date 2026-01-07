@@ -13,7 +13,7 @@ end
 --- @param controller Controller
 --- @return boolean
 function CheckEnemyInRangeBehaviour:run(level, actor, controller)
-	local target = controller.blackboard["target"]
+	local target = controller.blackboard.short["target"]
 	if not target then
 		return false
 	end

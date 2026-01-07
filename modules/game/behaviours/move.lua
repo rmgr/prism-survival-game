@@ -13,7 +13,7 @@ end
 --- @param controller Controller
 --- @return Action|boolean
 function MoveBehaviour:run(level, actor, controller)
-	local target = controller.blackboard["target"]
+	local target = controller.blackboard.short["target"]
 	if not target then
 		return false
 	end

@@ -7,7 +7,7 @@ local AttackBehaviour = prism.BehaviorTree.Node:extend("AttackBehaviour")
 --- @param controller Controller
 --- @return Action | boolean
 function AttackBehaviour:run(level, actor, controller)
-	local player = controller.blackboard["target"]
+	local player = controller.blackboard.short["target"]
 
 	if not player then
 		return false
