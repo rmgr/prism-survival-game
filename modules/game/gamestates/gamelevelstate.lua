@@ -26,6 +26,7 @@ function GameLevelState:__new(display, builderOrLevel, seed)
 			prism.systems.SensesSystem(),
 			prism.systems.SightSystem(),
 			prism.systems.ScentSystem(),
+			prism.systems.SoundSystem(),
 			prism.systems.FallSystem(),
 			prism.systems.FactionSystem(Game.factions),
 			prism.systems.DiffusionSystem(),

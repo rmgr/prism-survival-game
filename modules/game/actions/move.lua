@@ -9,21 +9,32 @@ local Move = prism.Action:extend("Move")
 Move.targets = { MoveTarget }
 
 Move.requiredComponents = {
-   prism.components.Controller,
-   prism.components.Mover,
+	prism.components.Controller,
+	prism.components.Mover,
 }
 
 --- @param level Level
 --- @param destination Vector2
 function Move:canPerform(level, destination)
-   local mover = self.owner:expect(prism.components.Mover)
-   return level:getCellPassableByActor(destination.x, destination.y, self.owner, mover.mask)
+	local mover = self.owner:expect(prism.components.Mover)
+	return level:getCellPassableByActor(destination.x, destination.y, self.owner, mover.mask)
 end
 
 --- @param level Level
 --- @param destination Vector2
 function Move:perform(level, destination)
-   level:moveActor(self.owner, destination)
+	local volume = 5
+	local cell = level:getCell(destination.x, destination.y)
+	if cell then
+		local sound = cell:get(prism.components.Sound)
+		if sound then
+			volume = sound:getVolume()
+		end
+	end
+	local emitSoundAction = prism.actions.EmitSound(self.owner, volume)
+	level:tryPerform(emitSoundAction)
+	--	level:getSystem(prism.systems.SoundSystem):playSound(level, destination.x, destination.y, volume, self.owner)
+	level:moveActor(self.owner, destination)
 end
 
 return Move
