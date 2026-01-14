@@ -15,6 +15,7 @@ end
 function MoveBehaviour:run(level, actor, controller)
 	local target = controller.blackboard.short["target"]
 
+	print("I MOVE")
 	if not target then
 		return false
 	end

@@ -23,7 +23,7 @@ prism.registerActor("Olm", function()
 					}),
 					prism.BehaviorTree.Sequence({
 						-- if Enemy in range, attack it.
-						prism.behaviours.CheckEnemyInRangeBehaviour(1),
+						prism.behaviours.CheckTargetInRangeBehaviour(1),
 						prism.behaviours.AttackBehaviour(),
 					}),
 					-- Move
@@ -44,5 +44,6 @@ prism.registerActor("Olm", function()
 		}),
 		prism.components.Olm(),
 		prism.components.Speed(50),
+		prism.components.Satiety(100),
 	})
 end)

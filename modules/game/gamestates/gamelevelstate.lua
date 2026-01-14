@@ -33,7 +33,8 @@ function GameLevelState:__new(display, builderOrLevel, rooms, seed)
 			prism.systems.FactionSystem(Game.factions),
 			prism.systems.DiffusionSystem(),
 			prism.systems.FireSystem(seed),
-			prism.systems.TickSystem()
+			prism.systems.TickSystem(),
+			prism.systems.SatietySystem()
 		)
 		local scentManager = prism.Actor()
 		scentManager:give(prism.components.ScentManager())
@@ -154,10 +155,14 @@ function GameLevelState:draw()
 	-- custom terminal drawing goes here!
 	local health = player:get(prism.components.Health)
 
+	local satiety = player:get(prism.components.Satiety)
 	if health then
 		self.display:print(1, 1, "HP: " .. health.hp .. "/" .. health:getMaxHP())
 	end
 	self.display:print(1, 2, "Depth: " .. Game.depth)
+	if satiety then
+		self.display:print(1, 4, "Satiety: " .. satiety.satiety .. "/" .. satiety.maxSatiety)
+	end
 
 	local log = player:get(prism.components.Log)
 	if log then

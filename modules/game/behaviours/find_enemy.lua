@@ -13,10 +13,12 @@ function FindEnemyBehaviour:run(level, actor, controller)
 		return false
 	end
 
-	local target = senses:query(level, prism.components.Controller):relation(actor, prism.relations.FoeRelation):first()
+	local target = senses:query(level, prism.components.Component):relation(actor, prism.relations.FoeRelation):first()
+
 	if not target then
 		target = controller.blackboard.long["last_heard"]
 	end
+
 	if not target then
 		return false
 	end

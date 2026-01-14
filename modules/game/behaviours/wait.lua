@@ -7,6 +7,7 @@ local WaitBehaviour = prism.BehaviorTree.Node:extend("WaitBehaviour")
 --- @param controller Controller
 --- @return Action
 function WaitBehaviour:run(level, actor, controller)
+	print("waitIng")
 	return prism.actions.Wait(actor)
 end
 

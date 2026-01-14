@@ -1,11 +1,14 @@
 --- @class Edible : Component
 --- @field healing integer
---- @overload fun(healing: integer): Edible
+--- @field satiety integer
+--- @overload fun(healing: integer, satiety: integer): Edible
 local Edible = prism.Component:extend("Edible")
 
 --- @param healing integer
-function Edible:__new(healing)
+--- @param satiety integer
+function Edible:__new(healing, satiety)
 	self.healing = healing
+	self.satiety = satiety
 end
 
 return Edible
