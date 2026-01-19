@@ -89,7 +89,6 @@ function FindNearestRoomNotContainingEnemyBehaviour:run(level, actor, controller
 			end
 		end
 	end
-
 	if not nearestRoom then
 		controller.blackboard.long["enemy_room_cache"] = nil
 		controller.blackboard.long["room_target"] = nil

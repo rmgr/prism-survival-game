@@ -17,11 +17,8 @@ function SatietyBelowPercentageCheckBehaviour:run(level, actor, controller)
 	if not satietyComponent then
 		return false
 	end
-	if (satietyComponent.satiety / satietyComponent.maxSatiety) * 100 < self.percentage then
-		return true
-	end
-
-	return false
+	local below = (satietyComponent.satiety / satietyComponent.maxSatiety) * 100 < self.percentage
+	return below
 end
 
 return SatietyBelowPercentageCheckBehaviour

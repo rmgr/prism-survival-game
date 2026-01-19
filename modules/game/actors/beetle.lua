@@ -1,0 +1,29 @@
+prism.register(prism.Component:extend("Beetle"))
+prism.registerActor("Beetle", function()
+	return prism.Actor.fromComponents({
+		prism.components.Name("Beetle"),
+		prism.components.Position(),
+		prism.components.Drawable({ index = "B", color = prism.Color4.BLUE, layer = math.huge - 5 }),
+		prism.components.Collider(),
+		prism.components.Senses(),
+		prism.components.Sight({ range = 12, fov = true }),
+		prism.components.Mover({ "walk" }),
+		prism.components.Smell({ threshold = 50 }),
+		prism.components.Hearing(),
+		prism.components.Scent({ strength = 80 }),
+		prism.components.BTController(prism.BehaviorTree.Root({
+			prism.BehaviorTree.Selector({
+				prism.behaviours.WaitBehaviour(),
+			}),
+		})),
+		prism.components.Health(3),
+		prism.components.Attacker(1),
+		prism.components.BelongsToFaction({ "BeetleFaction" }),
+		prism.components.AfraidOf({ "KoboldFaction" }),
+		prism.components.DropTable({
+			chance = 1,
+			entry = prism.actors.MeatBrick(),
+		}),
+		prism.components.Beetle(),
+	})
+end)

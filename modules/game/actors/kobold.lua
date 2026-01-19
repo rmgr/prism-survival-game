@@ -15,6 +15,7 @@ prism.registerActor("Kobold", function()
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Selector({
 				-- Hunger Subroutine
+
 				prism.BehaviorTree.Sequence({
 					prism.behaviours.SatietyBelowPercentageCheckBehaviour(90),
 					prism.behaviours.FindEdibleBehaviour(),
@@ -25,6 +26,17 @@ prism.registerActor("Kobold", function()
 						}),
 						prism.behaviours.MoveBehaviour(0),
 					}),
+				}),
+				-- WE are not finding a feared enemy even though we appear to have the relevant relations
+				-- Flee scary monsters
+				prism.BehaviorTree.Sequence({
+					prism.behaviours.CheckRoomTargetBehaviour(),
+					prism.behaviours.MoveBehaviour(),
+				}),
+				prism.BehaviorTree.Sequence({
+					prism.behaviours.FindFearedBehaviour(),
+					prism.behaviours.FindNearestRoomNotContainingEnemyBehaviour(),
+					prism.behaviours.MoveBehaviour(),
 				}),
 				-- Hunt Subroutine
 				prism.BehaviorTree.Sequence({
@@ -56,6 +68,7 @@ prism.registerActor("Kobold", function()
 			prism.behaviours.WaitBehaviour(),
 		})),
 		prism.components.Health(3),
+		prism.components.AfraidOf({ "OlmFaction" }),
 		prism.components.Attacker(1),
 		prism.components.BelongsToFaction({ "KoboldFaction" }),
 		prism.components.DropTable({

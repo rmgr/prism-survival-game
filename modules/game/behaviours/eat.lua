@@ -9,7 +9,6 @@ local EatBehaviour = prism.BehaviorTree.Node:extend("EatBehaviour")
 function EatBehaviour:run(level, actor, controller)
 	local target = controller.blackboard.short["target"]
 
-	print("I EAT")
 	if not target then
 		return false
 	end

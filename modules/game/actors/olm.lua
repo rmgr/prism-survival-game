@@ -6,7 +6,7 @@ prism.registerActor("Olm", function()
 		prism.components.Drawable({ index = "O", color = prism.Color4.NAVY }),
 		prism.components.Collider(),
 		prism.components.Senses(),
-		prism.components.Sight({ range = 1, fov = true }),
+		prism.components.Sight({ range = 2, fov = true }),
 		prism.components.Hearing(),
 		prism.components.Mover({ "walk" }),
 		prism.components.Scent({ strength = 20 }),

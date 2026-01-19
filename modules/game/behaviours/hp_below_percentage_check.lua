@@ -17,11 +17,8 @@ function HPBelowPercentageCheckBehaviour:run(level, actor, controller)
 	if not health then
 		return false
 	end
-	if (health.hp / health.maxHP) * 100 < self.percentage then
-		return true
-	end
-
-	return false
+	local below = (health.hp / health.maxHP) * 100 < self.percentage
+	return below
 end
 
 return HPBelowPercentageCheckBehaviour

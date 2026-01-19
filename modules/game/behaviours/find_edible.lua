@@ -20,7 +20,6 @@ function FindEdibleBehaviour:run(level, actor, controller)
 	end
 
 	controller.blackboard.short["target"] = target
-	print("Edible in sight")
 
 	return true
 end

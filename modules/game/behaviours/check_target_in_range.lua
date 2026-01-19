@@ -23,8 +23,8 @@ function CheckTargetInRangeBehaviour:run(level, actor, controller)
 	end
 	-- Check if player is within specified range
 	local distance = actor:getPosition():distance(target)
-	print("DISTANCE = " .. distance)
-	return distance <= self.range
+	local inRange = distance <= self.range
+	return inRange
 end
 
 return CheckTargetInRangeBehaviour
