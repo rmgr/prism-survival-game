@@ -30,7 +30,7 @@ function Kick:perform(level, kicked)
    ]]
 
 	local final = kicked:expectPosition()
-	for _ = 1, 3 do
+	for _ = 1, 2 do
 		local nextpos = final + direction
 		if not level:getCellPassable(nextpos.x, nextpos.y, mask) then
 			break

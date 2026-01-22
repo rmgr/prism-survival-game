@@ -19,28 +19,18 @@ function RandomMoveBehaviour:run(level, actor, controller)
 		return false
 	end
 
-	-- Get all neighbors using prism.neighborhood
-	local validPositions = {}
+	local dx = level.RNG:random(-1, 1)
+	local dy = level.RNG:random(-1, 1)
 
-	for _, dir in ipairs(prism.neighborhood) do
-		local nx, ny = currentPos.x + dir.x, currentPos.y + dir.y
-		local targetPos = prism.Vector2(nx, ny)
-		local move = prism.actions.Move(actor, targetPos)
-		if level:canPerform(move) then
-			table.insert(validPositions, targetPos)
-		end
-	end
+	local x, y = currentPos:decompose()
 
-	-- If no valid positions, fail
-	if #validPositions == 0 then
+	local targetPos = prism.Vector2(dx + x, dy + y)
+	local move = prism.actions.Move(actor, targetPos)
+	if level:canPerform(move) then
+		return move
+	else
 		return false
 	end
-
-	-- Pick a random valid position and store it in blackboard
-	local randomIndex = love.math.random(1, #validPositions)
-	controller.blackboard.short["target"] = validPositions[randomIndex]
-
-	return true
 end
 
 return RandomMoveBehaviour

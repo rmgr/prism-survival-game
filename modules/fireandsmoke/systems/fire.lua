@@ -57,7 +57,9 @@ function FireSystem:onTurnEnd(level, actor)
 		local x, y = fire:getPosition():decompose()
 		local actorsAtPosition = level:query(prism.components.Controller):at(x, y):gather()
 		for _, actorAtPosition in ipairs(actorsAtPosition) do
-			if not actorAtPosition:has(prism.components.Fire) then
+			if
+				not actorAtPosition:has(prism.components.Fire) and not actorAtPosition:has(prism.components.FireProof)
+			then
 				actorAtPosition:give(prism.components.Burning())
 			end
 		end

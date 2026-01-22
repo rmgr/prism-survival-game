@@ -12,7 +12,6 @@ function EmitSound:perform(level, volume)
 	end
 	local originX, originY = position:decompose()
 	local isPlayer = self.owner:has(prism.components.PlayerController)
-	local animated = false
 	if isPlayer then
 		level:yield(prism.messages.SkipAnimationsMessage())
 		level:yield(prism.messages.AnimationMessage({
@@ -47,6 +46,12 @@ function EmitSound:perform(level, volume)
 				local key = nx .. "," .. ny
 				-- Check if we've been here and if sound can transmit through this cell
 				if not visited[key] and self:canTransmitSound(level, nx, ny) then
+					--[[					level:yield(prism.messages.AnimationMessage({
+						animation = spectrum.animations.DistantSound(),
+						x = nx,
+						y = ny,
+					}))]]
+
 					visited[key] = true
 					q:push({ nx, ny, dist + 1 })
 				end
@@ -85,6 +90,7 @@ function EmitSound:canTransmitSound(level, x, y)
 	end
 
 	local walkBit = prism.Collision.createBitmaskFromMovetypes({ "walk", "fly" })
+	local flyBit = prism.Collision.createBitmaskFromMovetypes({ "fly" })
 	local mask = collider:getMask()
 	if not mask then
 		if self._soundCache then
@@ -93,7 +99,7 @@ function EmitSound:canTransmitSound(level, x, y)
 		return false
 	end
 
-	local passable = bit.band(mask, walkBit) == walkBit
+	local passable = (bit.band(mask, walkBit) == walkBit) or bit.band(mask, flyBit) == flyBit
 	if self._soundCache then
 		self._soundCache[cacheKey] = passable
 	end

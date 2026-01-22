@@ -11,7 +11,9 @@ function SatietySystem:onTurn(level, actor)
 		satietyComponent.satiety = satietyComponent.satiety - 1
 	end
 	if satietyComponent.satiety <= 0 then
-		level:tryPerform(prism.actions.Damage(actor, 1))
+		if actor:has(prism.components.PlayerController) then
+			level:tryPerform(prism.actions.Damage(actor, 1))
+		end
 	end
 end
 

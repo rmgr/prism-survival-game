@@ -11,7 +11,15 @@ end
 
 function BTController:act(level, actor)
 	self.blackboard.short = {}
-	return self.tree:run(level, actor, self)
+	local action = self.tree:run(level, actor, self)
+	if action then
+		if level:canPerform(action) then
+			return action
+		else
+			print("Lol found it: " .. action.name)
+		end
+	end
+	return prism.actions.Wait(actor)
 end
 
 return BTController

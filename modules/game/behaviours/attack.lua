@@ -15,7 +15,14 @@ function AttackBehaviour:run(level, actor, controller)
 	if not prism.Actor:is(target) then
 		return false
 	end
-	return prism.actions.Attack(actor, target)
+
+	local attackAction = prism.actions.Attack(actor, target)
+
+	if level:canPerform(attackAction) then
+		return attackAction
+	end
+
+	return false
 end
 
 return AttackBehaviour

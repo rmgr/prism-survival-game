@@ -22,6 +22,7 @@ function Game:__new(seed)
 		KoboldFaction = prism.factions.KoboldFaction(),
 		OlmFaction = prism.factions.OlmFaction(),
 		BeetleFaction = prism.factions.BeetleFaction(),
+		SalamanderFaction = prism.factions.SalamanderFaction(),
 	}
 
 	-- Establish initial faction relationships
@@ -29,10 +30,11 @@ function Game:__new(seed)
 		prism.relations.FactionRelationshipRelation(-100),
 		self.factions.KoboldFaction
 	)
-	self.factions.BeetleFaction:addRelation(
+	self.factions.PlayerFaction:addRelation(
 		prism.relations.FactionRelationshipRelation(-100),
-		self.factions.KoboldFaction
+		self.factions.SalamanderFaction
 	)
+	self.factions.BeetleFaction:addRelation(prism.relations.FactionRelationshipRelation(0), self.factions.KoboldFaction)
 	self.factions.PlayerFaction:addRelation(prism.relations.FactionRelationshipRelation(-100), self.factions.OlmFaction)
 	self.factions.OlmFaction:addRelation(prism.relations.FactionRelationshipRelation(-100), self.factions.KoboldFaction)
 end
@@ -48,7 +50,7 @@ function Game:generateNextFloor(builder)
 	self.depth = self.depth + 1
 
 	local genRNG = prism.RNG(self:getLevelSeed())
-	return levelgen(genRNG, self.player, 240, 120, builder)
+	return levelgen(genRNG, self.player, 80, 80, builder)
 end
 
 _G.Game = Game(tostring(os.time()))

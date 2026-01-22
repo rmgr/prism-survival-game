@@ -1,16 +1,17 @@
-prism.register(prism.Component:extend("Kobold"))
-prism.registerActor("Kobold", function()
+prism.register(prism.Component:extend("Salamander"))
+prism.registerActor("Salamander", function()
 	return prism.Actor.fromComponents({
-		prism.components.Name("Kobold"),
+		prism.components.Name("Salamander"),
 		prism.components.Position(),
-		prism.components.Drawable({ index = "k", color = prism.Color4.RED, layer = math.huge - 5 }),
+		prism.components.Drawable({ index = "S", color = prism.Color4.ORANGE, layer = math.huge - 5 }),
 		prism.components.Collider(),
 		prism.components.Senses(),
-		prism.components.Satiety(250),
+		prism.components.Satiety(150),
 		prism.components.Sight({ range = 12, fov = true }),
 		prism.components.Mover({ "walk" }),
 		prism.components.Smell({ threshold = 20 }),
 		prism.components.Hearing(),
+		prism.components.FireProof(),
 		prism.components.Scent({ strength = 20 }),
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Selector({
@@ -64,6 +65,11 @@ prism.registerActor("Kobold", function()
 							prism.behaviours.HPBelowPercentageCheckBehaviour(34),
 							prism.BehaviorTree.Selector({
 								prism.BehaviorTree.Sequence({
+									prism.behaviours.RandomChanceBehaviour(),
+									prism.behaviours.CheckTargetInRangeBehaviour(3),
+									prism.behaviours.SpitFireBehaviour(),
+								}),
+								prism.BehaviorTree.Sequence({
 									prism.behaviours.CheckRoomTargetBehaviour(),
 									prism.behaviours.MoveBehaviour(),
 								}),
@@ -87,11 +93,11 @@ prism.registerActor("Kobold", function()
 		prism.components.Health(3),
 		prism.components.AfraidOf({ "OlmFaction" }),
 		prism.components.Attacker(1),
-		prism.components.BelongsToFaction({ "KoboldFaction" }),
+		prism.components.BelongsToFaction({ "SalamanderFaction" }),
 		prism.components.DropTable({
 			chance = 0.8,
 			entry = prism.actors.MeatBrick(),
 		}),
-		prism.components.Kobold(),
+		prism.components.Salamander(),
 	})
 end)

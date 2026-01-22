@@ -3,10 +3,11 @@ BspGenerator.__index = BspGenerator
 
 -- Debug mode: when true, generates a simple test map instead of BSP dungeon
 local DEBUG = false
+local SPAWN_ENEMIES = true
 
 -- Configuration constants
 BspGenerator.MIN_PARTITION_SIZE = 8
-BspGenerator.MAX_DEPTH = 20
+BspGenerator.MAX_DEPTH = 14
 BspGenerator.ROOM_SIZE_MIN = 10
 
 function BspGenerator.new()
@@ -219,10 +220,8 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 	local roomH = rng:random(self.ROOM_SIZE_MIN, h - 2)
 	local roomX = x + rng:random(0, w - roomW - 1)
 	local roomY = y + rng:random(0, h - roomH - 1)
-
 	local centerX = roomX + math.floor(roomW / 2)
 	local centerY = roomY + math.floor(roomH / 2)
-
 	local room = {
 		x = roomX,
 		y = roomY,
@@ -231,14 +230,15 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 		centerX = centerX,
 		centerY = centerY,
 	}
-
 	self:addRoomToGraph(room)
-
 	local roomShape = rng:random() > 0.5 and "circle" or "square"
 	local noiseOffsetX = rng:random(1, 10000)
 	local noiseOffsetY = rng:random(1, 10000)
 	local noiseScale = 3
 	local noiseThreshold = 0.6
+
+	-- Collect valid floor positions
+	local validPositions = {}
 
 	for _x = roomX, roomX + roomW - 1 do
 		for _y = roomY, roomY + roomH - 1 do
@@ -247,11 +247,11 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 				local radius = math.min(roomW, roomH) / 2
 				shouldPlace = self:insideCircle(centerX, centerY, _x, _y, radius)
 			end
-
 			if shouldPlace then
 				local noise = love.math.perlinNoise(_x / noiseScale + noiseOffsetX, _y / noiseScale + noiseOffsetY)
 				if noise > noiseThreshold then
 					builder:set(_x, _y, prism.cells.Floor())
+					table.insert(validPositions, { x = _x, y = _y })
 				elseif noise < noiseThreshold and noise > 0.4 then
 					builder:set(_x, _y, prism.cells.Grass())
 				else
@@ -260,25 +260,40 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 			end
 		end
 	end
-	local enemies = {
-		nil,
-		prism.actors.Kobold,
-		prism.actors.Olm,
-	}
-	local enemyToPlace = enemies[rng:random(1, #enemies)]
-	if enemyToPlace ~= nil then
-		local actor = enemyToPlace()
-		---@cast actor Actor
-		if actor:has(prism.components.Olm) then
-			if roomShape == "square" then
-				local rect = prism.Rectangle(room.x, room.y, room.w, room.h)
-				local corners = rect:toCorners()
-				local randCorner = corners[rng:random(1, #corners)]
+	if SPAWN_ENEMIES then
+		-- Place random number of enemies
+		local enemies = {
+			prism.actors.Beetle,
+			prism.actors.Kobold,
+			prism.actors.Kobold,
+			prism.actors.Kobold,
+			prism.actors.Salamander,
+			prism.actors.Salamander,
+			prism.actors.Olm,
+		}
 
-				builder:addActor(actor, randCorner.x, randCorner.y - 1)
+		local numEnemies = rng:random(1, 3) -- 0 to 3 enemies per room
+
+		for i = 1, numEnemies do
+			if #validPositions > 0 then
+				local enemyType = enemies[rng:random(1, #enemies)]
+				local actor = enemyType()
+
+				if actor:has(prism.components.Olm) then
+					if roomShape == "square" then
+						local rect = prism.Rectangle(room.x, room.y, room.w, room.h)
+						local corners = rect:toCorners()
+						local randCorner = corners[rng:random(1, #corners)]
+						builder:addActor(actor, randCorner.x, randCorner.y - 1)
+					end
+				else --if actor:has(prism.components.Kobold) then
+					-- Pick random valid position and remove it from the list
+					local posIndex = rng:random(1, #validPositions)
+					local pos = validPositions[posIndex]
+					table.remove(validPositions, posIndex)
+					builder:addActor(actor, pos.x, pos.y)
+				end
 			end
-		elseif actor:has(prism.components.Kobold) then
-			builder:addActor(actor, room.centerX, room.centerY)
 		end
 	end
 	return room

@@ -27,7 +27,7 @@ function GameLevelState:__new(display, builderOrLevel, rooms, seed)
 		builder:addSystems(
 			prism.systems.SensesSystem(),
 			prism.systems.SightSystem(),
-			prism.systems.ScentSystem(),
+			--prism.systems.ScentSystem(),
 			prism.systems.SoundSystem(),
 			prism.systems.FallSystem(),
 			prism.systems.FearSystem(),

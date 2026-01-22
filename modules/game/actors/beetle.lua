@@ -8,22 +8,22 @@ prism.registerActor("Beetle", function()
 		prism.components.Senses(),
 		prism.components.Sight({ range = 12, fov = true }),
 		prism.components.Mover({ "walk" }),
-		prism.components.Smell({ threshold = 50 }),
 		prism.components.Hearing(),
-		prism.components.Scent({ strength = 80 }),
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Selector({
+				prism.behaviours.RandomMoveBehaviour(),
 				prism.behaviours.WaitBehaviour(),
 			}),
 		})),
 		prism.components.Health(3),
 		prism.components.Attacker(1),
 		prism.components.BelongsToFaction({ "BeetleFaction" }),
-		prism.components.AfraidOf({ "KoboldFaction" }),
+		prism.components.AfraidOf({ "KoboldFaction", "OlmFaction" }),
 		prism.components.DropTable({
 			chance = 1,
 			entry = prism.actors.MeatBrick(),
 		}),
 		prism.components.Beetle(),
+		prism.components.Speed(50),
 	})
 end)

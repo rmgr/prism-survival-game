@@ -13,11 +13,11 @@ prism.registerActor("Olm", function()
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Sequence({
 				prism.behaviours.ListenBehaviour(),
-				prism.behaviours.FindEnemyBehaviour(),
+				prism.behaviours.FindActorBehaviour({ prism.relations.FoeRelation }),
 				prism.BehaviorTree.Selector({
 					-- Either,
 					prism.BehaviorTree.Sequence({
-						prism.behaviours.HPBelowPercentageCheckBehaviour(34),
+						prism.behaviours.HPBelowPercentageCheckBehaviour(20),
 						prism.behaviours.FleeBehaviour(),
 						prism.behaviours.MoveBehaviour(),
 					}),
@@ -39,11 +39,11 @@ prism.registerActor("Olm", function()
 		prism.components.Attacker(5),
 		prism.components.BelongsToFaction({ "OlmFaction" }),
 		prism.components.DropTable({
-			chance = 0.3,
+			chance = 0.8,
 			entry = prism.actors.MeatBrick(),
 		}),
 		prism.components.Olm(),
 		prism.components.Speed(50),
-		prism.components.Satiety(100),
+		prism.components.Satiety(1000),
 	})
 end)
