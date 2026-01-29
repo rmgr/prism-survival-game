@@ -113,7 +113,10 @@ function GameLevelState:updateDecision(dt, owner, decision)
 	if controls.inventory.pressed then
 		local inventory = owner:get(prism.components.Inventory)
 		if inventory then
-			local inventoryState = spectrum.gamestates.InventoryState(self.display, decision, self.level, inventory)
+			local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/wanderlust_16x16.png", 16, 16)
+			local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(16, 16))
+			local inventoryState =
+				spectrum.gamestates.InventoryState(self.display, display, decision, self.level, inventory)
 			self.manager:push(inventoryState)
 		end
 	end

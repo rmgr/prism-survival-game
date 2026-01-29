@@ -7,6 +7,7 @@ local Name = prism.components.Name
 --- @overload fun(display: Display, decision: ActionDecision, level: Level, item: Actor)
 local InventoryActionState = spectrum.GameState:extend("InventoryActionState")
 
+local hud = love.graphics.newImage("display/actions.png")
 --- @param display Display
 --- @param decision ActionDecision
 --- @param level Level
@@ -29,18 +30,18 @@ end
 
 function InventoryActionState:load(previous)
 	--- @cast previous InventoryState
-	self.previousState = previous.previousState
+	self.previousState = previous
 end
 
 function InventoryActionState:draw()
 	self.previousState:draw()
 	self.display:clear()
-	self.display:print(1, 1, Name.get(self.item), nil, nil, 2, "right")
+	self.display:print(60, 10, Name.get(self.item), nil, nil, 2, "left")
 
 	for i, action in ipairs(self.actions) do
 		local letter = string.char(96 + i)
 		local name = string.gsub(action.className, "Action", "")
-		self.display:print(1, 1 + i, string.format("[%s] %s", letter, name), nil, nil, nil, "right")
+		self.display:print(60, 10 + i, string.format("[%s] %s", letter, name), nil, nil, nil, "left")
 	end
 
 	self.display:draw()
