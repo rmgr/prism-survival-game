@@ -11,5 +11,7 @@ love_files = [
     "./prism/extra/*",
     "./prism/spectrum/*",
     "./prism/geometer/*",
-    "-*/.*",
+    "./modules/**/*",   
+	"./display/*",
+"-*/.*",
 ]

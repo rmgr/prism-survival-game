@@ -207,7 +207,7 @@ function BspGenerator:addRandomPits(builder, width, height, rng)
 
 	for x = 1, width do
 		for y = 1, height do
-			local noise = love.math.perlinNoise(x / noiseScale + noiseOffsetX, y / noiseScale + noiseOffsetY)
+			local noise = love.math.noise(x / noiseScale + noiseOffsetX, y / noiseScale + noiseOffsetY)
 			if noise > pitThreshold then
 				builder:set(x, y, prism.cells.Pit())
 			end
@@ -248,7 +248,7 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 				shouldPlace = self:insideCircle(centerX, centerY, _x, _y, radius)
 			end
 			if shouldPlace then
-				local noise = love.math.perlinNoise(_x / noiseScale + noiseOffsetX, _y / noiseScale + noiseOffsetY)
+				local noise = love.math.noise(_x / noiseScale + noiseOffsetX, _y / noiseScale + noiseOffsetY)
 				if noise > noiseThreshold then
 					builder:set(_x, _y, prism.cells.Floor())
 					table.insert(validPositions, { x = _x, y = _y })
@@ -267,7 +267,6 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 			prism.actors.Kobold,
 			prism.actors.Kobold,
 			prism.actors.Kobold,
-			prism.actors.Salamander,
 			prism.actors.Salamander,
 			prism.actors.Olm,
 		}
