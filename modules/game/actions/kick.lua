@@ -1,5 +1,6 @@
 local Log = prism.components.Log
 local Name = prism.components.Name
+local ConditionHolder = prism.components.ConditionHolder
 
 local KickTarget = prism.Target(prism.components.Collider):range(1):sensed()
 ---@class KickAction : Action
@@ -28,9 +29,19 @@ function Kick:perform(level, kicked)
 		prism.actions.ChangeFactionRelationship(self.owner, "PlayerFaction", "KoboldFaction", 200)
 	level:tryPerform(changeRelationship)
    ]]
+	local damageModifiers = ConditionHolder.getActorModifiers(self.owner, prism.modifiers.DamageModifier)
+	local modifiedDamage = 1
+	for _, modifier in ipairs(damageModifiers) do
+		modifiedDamage = modifiedDamage + modifier.delta
+	end
 
+	local modifiers = ConditionHolder.getActorModifiers(self.owner, prism.modifiers.KnockbackModifier)
+	local modifiedKnockback = 2
+	for _, modifier in ipairs(modifiers) do
+		modifiedKnockback = modifiedKnockback + modifier.delta
+	end
 	local final = kicked:expectPosition()
-	for _ = 1, 2 do
+	for _ = 1, modifiedKnockback do
 		local nextpos = final + direction
 		if not level:getCellPassable(nextpos.x, nextpos.y, mask) then
 			break
@@ -42,7 +53,7 @@ function Kick:perform(level, kicked)
 		animation = spectrum.animations.Attack(self.owner, kicked:getPosition()),
 	}))
 	level:moveActor(kicked, final)
-	local damage = prism.actions.Damage(kicked, 1)
+	local damage = prism.actions.Damage(kicked, modifiedDamage)
 	level:tryPerform(damage)
 
 	local kickName = Name.lower(kicked)

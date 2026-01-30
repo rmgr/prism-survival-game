@@ -23,9 +23,9 @@ function Health:getMaxHP()
 	local modifiers = ConditionHolder.getActorModifiers(self.owner, prism.modifiers.HealthModifier)
 
 	local modifiedMaxHP = self.maxHP
-	--	for _, modifier in ipairs(modifiers) do
-	--		modifiedMaxHP = modifiedMaxHP + modifier.maxHP
-	--	end
+	for _, modifier in ipairs(modifiers) do
+		modifiedMaxHP = modifiedMaxHP + modifier.hpDelta
+	end
 
 	return modifiedMaxHP
 end

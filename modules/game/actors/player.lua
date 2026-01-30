@@ -12,11 +12,15 @@ prism.registerActor("Player", function()
 		prism.components.Log(),
 		prism.components.BelongsToFaction({ "PlayerFaction" }),
 		prism.components.Inventory({
-			limitCount = 26,
+			limitCount = 25,
 		}),
 		prism.components.ConditionHolder(),
 		prism.components.Scent({ strength = 30 }),
 		prism.components.Hearing(),
 		prism.components.Satiety(250),
+		prism.components.Equipper({
+			"hand",
+			"armour",
+		}),
 	})
 end)

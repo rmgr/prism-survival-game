@@ -11,6 +11,7 @@ prism.loadModule("modules/sound")
 prism.loadModule("modules/fireandsmoke")
 prism.loadModule("prism/extra/condition")
 prism.loadModule("prism/extra/inventory")
+prism.loadModule("prism/extra/equipment")
 prism.loadModule("prism/extra/droptable")
 
 prism.loadModule("modules/game")
