@@ -104,10 +104,10 @@ function GameLevelState:updateDecision(dt, owner, decision)
 			return
 		end
 
-		-- If can't move, try to kick
+		-- If can't move, try to attack
 		local target = self.level:query():at(destination:decompose()):first()
-		local kick = prism.actions.Kick(owner, target)
-		self:setAction(kick)
+		local attack = prism.actions.Attack(owner, target)
+		self:setAction(attack)
 	end
 
 	if controls.inventory.pressed then

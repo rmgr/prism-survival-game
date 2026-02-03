@@ -1,21 +1,49 @@
 local Log = prism.components.Log
 local Name = prism.components.Name
+local ConditionHolder = prism.components.ConditionHolder
 local AttackTarget = prism.Target(prism.components.Health):isActor():range(1)
+local mask = prism.Collision.createBitmaskFromMovetypes({ "fly" })
 
 --- @class Attack: Action
 --- @overload fun(owner: Actor, attacked: Actor): Attack
 local Attack = prism.Action:extend("Attack")
 Attack.name = "Attack"
 Attack.targets = { AttackTarget }
-Attack.requiredComponents = { prism.components.Attacker }
 
 --- @param level Level
 --- @param attacked Actor
 function Attack:perform(level, attacked)
-	local attacker = self.owner:expect(prism.components.Attacker)
+	local direction = (attacked:getPosition() - self.owner:getPosition())
+	local attacker = self.owner:get(prism.components.Attacker)
+	local baseDmg = 1
+	if attacker then
+		baseDmg = attacker.damage
+	end
 
-	local damage = prism.actions.Damage(attacked, attacker.damage)
+	local damageModifiers = ConditionHolder.getActorModifiers(self.owner, prism.modifiers.DamageModifier)
+	local modifiedDamage = baseDmg
+	for _, modifier in ipairs(damageModifiers) do
+		modifiedDamage = modifiedDamage + modifier.delta
+	end
+
+	local modifiers = ConditionHolder.getActorModifiers(self.owner, prism.modifiers.KnockbackModifier)
+	local modifiedKnockback = 0
+	for _, modifier in ipairs(modifiers) do
+		modifiedKnockback = modifiedKnockback + modifier.delta
+	end
+	local final = attacked:expectPosition()
+	for _ = 1, modifiedKnockback do
+		local nextpos = final + direction
+		if not level:getCellPassable(nextpos.x, nextpos.y, mask) then
+			break
+		end
+		final = nextpos
+	end
+
+	level:moveActor(attacked, final)
+	local damage = prism.actions.Damage(attacked, modifiedDamage)
 	level:tryPerform(damage)
+
 	local attackName = Name.lower(attacked)
 	local ownerName = Name.lower(self.owner)
 	local dealt = damage.dealt or 0
