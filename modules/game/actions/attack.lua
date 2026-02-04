@@ -15,13 +15,20 @@ Attack.targets = { AttackTarget }
 function Attack:perform(level, attacked)
 	local direction = (attacked:getPosition() - self.owner:getPosition())
 	local attacker = self.owner:get(prism.components.Attacker)
+
 	local baseDmg = 1
 	if attacker then
 		baseDmg = attacker.damage
 	end
 
-	local damageModifiers = ConditionHolder.getActorModifiers(self.owner, prism.modifiers.DamageModifier)
+	local damageReductionModifiers =
+		ConditionHolder.getActorModifiers(attacked, prism.modifiers.DamageReductionModifier)
 	local modifiedDamage = baseDmg
+	for _, modifier in ipairs(damageReductionModifiers) do
+		modifiedDamage = modifiedDamage - modifier.mod
+	end
+
+	local damageModifiers = ConditionHolder.getActorModifiers(self.owner, prism.modifiers.DamageModifier)
 	for _, modifier in ipairs(damageModifiers) do
 		modifiedDamage = modifiedDamage + modifier.delta
 	end
