@@ -84,9 +84,9 @@ prism.registerActor("Kobold", function()
 			prism.behaviours.RandomMoveBehaviour(),
 			prism.behaviours.WaitBehaviour(),
 		})),
-		prism.components.Health(3),
+		prism.components.Health(30),
 		prism.components.AfraidOf({ "OlmFaction" }),
-		prism.components.Attacker(1),
+		prism.components.Attacker(10),
 		prism.components.BelongsToFaction({ "KoboldFaction" }),
 		prism.components.DropTable({
 			chance = 0.8,

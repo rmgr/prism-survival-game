@@ -35,8 +35,8 @@ prism.registerActor("Olm", function()
 			}),
 			prism.behaviours.WaitBehaviour(),
 		})),
-		prism.components.Health(6),
-		prism.components.Attacker(5),
+		prism.components.Health(60),
+		prism.components.Attacker(50),
 		prism.components.BelongsToFaction({ "OlmFaction" }),
 		prism.components.DropTable({
 			chance = 0.8,

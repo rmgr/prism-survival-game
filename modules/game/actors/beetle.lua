@@ -15,8 +15,8 @@ prism.registerActor("Beetle", function()
 				prism.behaviours.WaitBehaviour(),
 			}),
 		})),
-		prism.components.Health(3),
-		prism.components.Attacker(1),
+		prism.components.Health(30),
+		prism.components.Attacker(10),
 		prism.components.BelongsToFaction({ "BeetleFaction" }),
 		prism.components.AfraidOf({ "KoboldFaction", "OlmFaction" }),
 		prism.components.DropTable({

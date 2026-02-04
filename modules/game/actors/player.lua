@@ -8,7 +8,7 @@ prism.registerActor("Player", function()
 		prism.components.Senses(),
 		prism.components.Sight({ range = 64, fov = true }),
 		prism.components.Mover({ "walk" }),
-		prism.components.Health(10),
+		prism.components.Health(100),
 		prism.components.Log(),
 		prism.components.BelongsToFaction({ "PlayerFaction" }),
 		prism.components.Inventory({
@@ -17,6 +17,7 @@ prism.registerActor("Player", function()
 		prism.components.ConditionHolder(),
 		prism.components.Scent({ strength = 30 }),
 		prism.components.Hearing(),
+		prism.components.Attacker(10),
 		prism.components.Satiety(250),
 		prism.components.Equipper({
 			"hand",

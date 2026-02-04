@@ -6,7 +6,7 @@ prism.registerActor("Axe", function()
 			color = prism.Color4.ORANGE,
 		}),
 		prism.components.Item(),
-		prism.components.Equipment("hand", prism.condition.Condition(prism.modifiers.KnockbackModifier(2))),
+		prism.components.Equipment("hand", prism.condition.Condition(prism.modifiers.KnockbackModifier(15))),
 		prism.components.Position(),
 		prism.components.Description("And my axe!"),
 	})
@@ -21,7 +21,7 @@ prism.registerActor("Club", function()
 		prism.components.Item(),
 		prism.components.Equipment(
 			"hand",
-			prism.condition.Condition(prism.modifiers.KnockbackModifier(2), prism.modifiers.DamageModifier(1))
+			prism.condition.Condition(prism.modifiers.KnockbackModifier(2), prism.modifiers.DamageModifier(10))
 		),
 		prism.components.Position(),
 		prism.components.Description("Big chunk of wood, good for hitting things."),
@@ -35,7 +35,7 @@ prism.registerActor("Sword", function()
 			color = prism.Color4.YELLOW,
 		}),
 		prism.components.Item(),
-		prism.components.Equipment("hand", prism.condition.Condition(prism.modifiers.DamageModifier(1))),
+		prism.components.Equipment("hand", prism.condition.Condition(prism.modifiers.DamageModifier(10))),
 		prism.components.Position(),
 		prism.components.Description("The classic weapon of a knight"),
 	})
@@ -50,7 +50,7 @@ prism.registerActor("HugeSword", function()
 		prism.components.Item(),
 		prism.components.Equipment(
 			"hand",
-			prism.condition.Condition(prism.modifiers.KnockbackModifier(3), prism.modifiers.DamageModifier(2))
+			prism.condition.Condition(prism.modifiers.KnockbackModifier(3), prism.modifiers.DamageModifier(20))
 		),
 		prism.components.Position(),
 		prism.components.Description("Something something anime."),
