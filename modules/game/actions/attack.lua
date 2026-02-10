@@ -54,6 +54,8 @@ function Attack:perform(level, attacked)
 	local attackName = Name.lower(attacked)
 	local ownerName = Name.lower(self.owner)
 	local dealt = damage.dealt or 0
+	attacked:addRelation(prism.relations.AttackedByRelation, self.owner)
+	self.owner:addRelation(prism.relations.AttackedRelation, attacked)
 
 	level:yield(prism.messages.AnimationMessage({
 		animation = spectrum.animations.Attack(self.owner, attacked:getPosition()),

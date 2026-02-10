@@ -22,6 +22,7 @@ function FindNearestRoomNotContainingEnemyBehaviour:run(level, actor, controller
 		return false
 	end
 
+	---@cast enemy Actor
 	local enemy = controller.blackboard.short["target"]
 	if not enemy then
 		-- No enemy, clear cache
@@ -32,7 +33,6 @@ function FindNearestRoomNotContainingEnemyBehaviour:run(level, actor, controller
 
 	local enemyPos = nil
 	if prism.Actor:is(enemy) then
-		---@cast enemy Actor
 		enemyPos = enemy:getPosition()
 	end
 

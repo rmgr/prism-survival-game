@@ -1,3 +1,5 @@
+--local hungerSubtree = require("modules.game.subtrees.hunger_subtree")
+
 prism.register(prism.Component:extend("Kobold"))
 prism.registerActor("Kobold", function()
 	return prism.Actor.fromComponents({
@@ -15,71 +17,11 @@ prism.registerActor("Kobold", function()
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Selector({
 				-- Hunger Subroutine
-				prism.BehaviorTree.Sequence({
-					prism.behaviours.SatietyBelowPercentageCheckBehaviour(80),
-					prism.BehaviorTree.Selector({
-						-- Try to find actual food first
-						prism.BehaviorTree.Sequence({
-							prism.behaviours.FindEdibleBehaviour(),
-							prism.BehaviorTree.Selector({
-								prism.BehaviorTree.Sequence({
-									prism.behaviours.CheckTargetInRangeBehaviour(0),
-									prism.behaviours.EatBehaviour(),
-								}),
-								prism.behaviours.MoveBehaviour(0),
-							}),
-						}),
-						-- If no food found, hunt anyone (allies included when desperate)
-						prism.BehaviorTree.Sequence({
-							prism.behaviours.FindActorBehaviour({}),
-							prism.BehaviorTree.Selector({
-								prism.BehaviorTree.Sequence({
-									prism.behaviours.CheckTargetInRangeBehaviour(1),
-									prism.behaviours.AttackBehaviour(),
-								}),
-								prism.behaviours.MoveBehaviour(),
-							}),
-						}),
-					}),
-				}),
+				prism.behaviours.HungerSubroutine(),
 				-- Flee scary monsters
-				prism.BehaviorTree.Sequence({
-					prism.behaviours.FindFearedBehaviour(),
-					prism.BehaviorTree.Selector({
-						prism.BehaviorTree.Sequence({
-							prism.behaviours.CheckRoomTargetBehaviour(),
-							prism.behaviours.MoveBehaviour(),
-						}),
-						prism.BehaviorTree.Sequence({
-							prism.behaviours.FindNearestRoomNotContainingEnemyBehaviour(),
-							prism.behaviours.MoveBehaviour(),
-						}),
-					}),
-				}),
+				prism.behaviours.FleeSubroutine(),
 				-- Hunt Subroutine (only actual foes)
-				prism.BehaviorTree.Sequence({
-					prism.behaviours.FindActorBehaviour({ prism.relations.FoeRelation }),
-					prism.BehaviorTree.Selector({
-						prism.BehaviorTree.Sequence({
-							prism.behaviours.HPBelowPercentageCheckBehaviour(34),
-							prism.BehaviorTree.Selector({
-								prism.BehaviorTree.Sequence({
-									prism.behaviours.CheckRoomTargetBehaviour(),
-									prism.behaviours.MoveBehaviour(),
-								}),
-								prism.BehaviorTree.Sequence({
-									prism.behaviours.FindNearestRoomNotContainingEnemyBehaviour(),
-									prism.behaviours.MoveBehaviour(),
-								}),
-							}),
-						}),
-						prism.BehaviorTree.Sequence({
-							prism.behaviours.CheckTargetInRangeBehaviour(1),
-							prism.behaviours.AttackBehaviour(),
-						}),
-						prism.behaviours.MoveBehaviour(),
-					}),
-				}),
+				prism.behaviours.HuntSubroutine(34, 1),
 			}),
 			prism.behaviours.RandomMoveBehaviour(),
 			prism.behaviours.WaitBehaviour(),

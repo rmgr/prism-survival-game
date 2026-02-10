@@ -11,27 +11,14 @@ prism.registerActor("Olm", function()
 		prism.components.Mover({ "walk" }),
 		prism.components.Scent({ strength = 20 }),
 		prism.components.BTController(prism.BehaviorTree.Root({
-			prism.BehaviorTree.Sequence({
-				prism.behaviours.ListenBehaviour(),
-				prism.behaviours.FindActorBehaviour({ prism.relations.FoeRelation }),
-				prism.BehaviorTree.Selector({
-					-- Either,
-					prism.BehaviorTree.Sequence({
-						prism.behaviours.HPBelowPercentageCheckBehaviour(20),
-						prism.behaviours.FleeBehaviour(),
-						prism.behaviours.MoveBehaviour(),
-					}),
-					prism.BehaviorTree.Sequence({
-						-- if Enemy in range, attack it.
-						prism.behaviours.CheckTargetInRangeBehaviour(1),
-						prism.behaviours.AttackBehaviour(),
-					}),
-					-- Move
-					prism.behaviours.MoveBehaviour(),
-					-- Or finally, wait
-					-- We need this here to catch the case where we can't move or attack
-					prism.behaviours.WaitBehaviour(),
-				}),
+			prism.behaviours.ListenBehaviour(),
+			prism.BehaviorTree.Selector({
+				-- Hunger Subroutine
+				prism.behaviours.HungerSubroutine(),
+				-- Flee scary monsters
+				prism.behaviours.FleeSubroutine(),
+				-- Hunt Subroutine (only actual foes)
+				prism.behaviours.HuntSubroutine(15, 1),
 			}),
 			prism.behaviours.WaitBehaviour(),
 		})),

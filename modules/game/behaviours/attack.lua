@@ -18,6 +18,7 @@ function AttackBehaviour:run(level, actor, controller)
 
 	local attackAction = prism.actions.Attack(actor, target)
 
+	local x, y = level:canPerform(attackAction)
 	if level:canPerform(attackAction) then
 		return attackAction
 	end

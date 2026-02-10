@@ -14,7 +14,7 @@ function FindFearedBehaviour:run(level, actor, controller)
 	end
 
 	local target =
-		senses:query(level, prism.components.BTController):relation(actor, prism.relations.FearsRelation):first()
+		senses:query(level, prism.components.Controller):relation(actor, prism.relations.FearsRelation):first()
 	--local target = level:query(prism.components.BTController):relation(actor, prism.relations.FearsRelation):first()
 	if not target then
 		return false

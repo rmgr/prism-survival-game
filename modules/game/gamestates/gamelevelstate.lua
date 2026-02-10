@@ -35,7 +35,8 @@ function GameLevelState:__new(display, builderOrLevel, rooms, seed)
 			prism.systems.DiffusionSystem(),
 			prism.systems.FireSystem(seed),
 			prism.systems.TickSystem(),
-			prism.systems.SatietySystem()
+			prism.systems.SatietySystem(),
+			prism.systems.AttackedSystem()
 		)
 		local scentManager = prism.Actor()
 		scentManager:give(prism.components.ScentManager())

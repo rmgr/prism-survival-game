@@ -30,6 +30,7 @@ function Game:__new(seed)
 		prism.relations.FactionRelationshipRelation(-100),
 		self.factions.KoboldFaction
 	)
+
 	self.factions.PlayerFaction:addRelation(
 		prism.relations.FactionRelationshipRelation(-100),
 		self.factions.SalamanderFaction

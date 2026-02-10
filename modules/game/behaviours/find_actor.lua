@@ -1,4 +1,4 @@
-	--- @class FindActorBehaviour : BehaviorTree.Node
+--- @class FindActorBehaviour : BehaviorTree.Node
 --- @field relations table
 --- @overload fun(relations: table): BehaviorTree.Node
 local FindActorBehaviour = prism.BehaviorTree.Node:extend("FindActorBehaviour")
@@ -17,13 +17,12 @@ function FindActorBehaviour:run(level, actor, controller)
 	local senses = actor:get(prism.components.Senses)
 	if not senses then
 		return false
-		end
-		if not controller or not controller.blackboard or not controller.blackboard.short then
-			return false
-			end
+	end
+	if not controller or not controller.blackboard or not controller.blackboard.short then
+		return false
+	end
 
-
-	local query = senses:query(level, prism.components.Component)
+	local query = senses:query(level, prism.components.Controller)
 
 	if self.relations and #self.relations > 0 then
 		for _, relation in ipairs(self.relations) do
