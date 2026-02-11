@@ -358,12 +358,14 @@ function BspGenerator:generate(rng, player, width, height, builder)
 				table.insert(stack, item.right)
 			end
 			if not item.left and not item.right then
-				local room = self:createRoom(builder, item.x, item.y, item.w, item.h, rng)
-				if not placedPlayer then
-					builder:addActor(player, room.centerX, room.centerY)
-					placedPlayer = true
+				if item.x + item.w < width and item.y + item.h < width and item.x - item.w > 0 and item.y - item.h then
+					local room = self:createRoom(builder, item.x, item.y, item.w, item.h, rng)
+					if not placedPlayer then
+						builder:addActor(player, room.centerX, room.centerY)
+						placedPlayer = true
+					end
+					item.room = room
 				end
-				item.room = room
 			end
 		end
 	end
