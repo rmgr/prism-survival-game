@@ -1,4 +1,4 @@
-local levelgen = require("levelgen")
+--local levelgen = require("levelgen")
 
 --- @class Game : Object
 --- @field depth integer
@@ -47,11 +47,11 @@ end
 
 --- @param builder? LevelBuilder
 --- @return LevelBuilder builder, table rooms
-function Game:generateNextFloor(builder)
+function Game:generateNextFloor()
 	self.depth = self.depth + 1
 
-	local genRNG = prism.RNG(self:getLevelSeed())
-	return levelgen(genRNG, self.player, 80, 80, builder)
+	local generator = prism.generators.Cavern()
+	return generator:generate({ w = 80, h = 80, seed = self:getLevelSeed(), depth = self.depth }, self.player, self.rng) --, 100, 160, builder
 end
 
 _G.Game = Game(tostring(os.time()))

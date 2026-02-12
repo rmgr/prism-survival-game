@@ -271,7 +271,7 @@ function BspGenerator:createRoom(builder, x, y, w, h, rng)
 			prism.actors.Olm,
 		}
 
-		local numEnemies = rng:random(1, 3) -- 0 to 3 enemies per room
+		local numEnemies = rng:random(0, 3) -- 0 to 3 enemies per room
 
 		for i = 1, numEnemies do
 			if #validPositions > 0 then
