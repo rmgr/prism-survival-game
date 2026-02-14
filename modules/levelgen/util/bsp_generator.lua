@@ -1,22 +1,11 @@
----@class RoomGraph
----@field rooms table
----@field connections table
----@field roomIdCounter integer
----
 ---@class BspGenerator
 ---@field MIN_PARTITION_SIZE integer
 ---@field MAX_DEPTH integer
 ---@field ROOM_SIZE_MIN integer
----@field roomGraph RoomGraph
 local BspGenerator = {
 	MIN_PARTITION_SIZE = 8,
 	MAX_DEPTH = 14,
 	ROOM_SIZE_MIN = 10,
-	roomGraph = {
-		rooms = {},
-		connections = {},
-		roomIdCounter = 0,
-	},
 }
 
 function BspGenerator:new()
@@ -26,40 +15,6 @@ function BspGenerator:new()
 	return self
 end
 ---
---- Create a unique room ID
-function BspGenerator:createRoomId()
-	self.roomGraph.roomIdCounter = self.roomGraph.roomIdCounter + 1
-	return self.roomGraph.roomIdCounter
-end
-
---- Add a room to the graph
-function BspGenerator:addRoomToGraph(room)
-	room.id = self:createRoomId()
-	self.roomGraph.rooms[room.id] = room
-	self.roomGraph.connections[room.id] = {}
-	return room.id
-end
-
---- Add a connection between two rooms
-function BspGenerator:connectRooms(room1Id, room2Id)
-	if not self.roomGraph.connections[room1Id] then
-		self.roomGraph.connections[room1Id] = {}
-	end
-	if not self.roomGraph.connections[room2Id] then
-		self.roomGraph.connections[room2Id] = {}
-	end
-
-	-- Check if already connected
-	for _, connId in ipairs(self.roomGraph.connections[room1Id]) do
-		if connId == room2Id then
-			return
-		end
-	end
-
-	-- Add bidirectional connection
-	table.insert(self.roomGraph.connections[room1Id], room2Id)
-	table.insert(self.roomGraph.connections[room2Id], room1Id)
-end
 --- Split a partition into two smaller partitions
 function BspGenerator:split(partition, rng)
 	local splitVertical = partition.w > partition.h
@@ -113,7 +68,7 @@ function BspGenerator:splitPartition(partition, depth, rng)
 end
 
 function BspGenerator:generateBspTree(width, height, rng)
-	return self:splitPartition({ x = 1, y = 1, w = width, h = height }, 0, rng), self.roomGraph
+	return self:splitPartition({ x = 1, y = 1, w = width, h = height }, 0, rng)
 end
 
 function BspGenerator:getAnyLeafRoom(partition)
@@ -128,39 +83,6 @@ function BspGenerator:getAnyLeafRoom(partition)
 	return self:getAnyLeafRoom(partition.left) or self:getAnyLeafRoom(partition.right)
 end
 
-function BspGenerator:createLShapedCorridor(room1, room2, builder, rng)
-	local x1, y1 = room1.centerX, room1.centerY
-	local x2, y2 = room2.centerX, room2.centerY
-
-	if rng:random() > 0.5 then
-		builder:line(x1, y1, x2, y1, prism.cells.Floor)
-		builder:line(x2, y1, x2, y2, prism.cells.Floor)
-	else
-		builder:line(x1, y1, x1, y2, prism.cells.Floor)
-		builder:line(x1, y2, x2, y2, prism.cells.Floor)
-	end
-
-	if room1.id and room2.id then
-		self:connectRooms(room1.id, room2.id)
-	end
-end
-
-function BspGenerator:connectSiblings(partition, builder, rng)
-	if not partition or not partition.left or not partition.right then
-		return
-	end
-
-	self:connectSiblings(partition.left, builder, rng)
-	self:connectSiblings(partition.right, builder, rng)
-
-	local leftRoom = self:getAnyLeafRoom(partition.left)
-	local rightRoom = self:getAnyLeafRoom(partition.right)
-
-	if leftRoom and rightRoom and leftRoom.room and rightRoom.room then
-		self:createLShapedCorridor(leftRoom.room, rightRoom.room, builder, rng)
-	end
-end
-
 function BspGenerator:collectAllRooms(partition, rooms)
 	if not partition then
 		return
@@ -172,24 +94,6 @@ function BspGenerator:collectAllRooms(partition, rooms)
 
 	self:collectAllRooms(partition.left, rooms)
 	self:collectAllRooms(partition.right, rooms)
-end
-
-function BspGenerator:addExtraConnections(bspTree, builder, rng, numConnections)
-	local allRooms = {}
-	self:collectAllRooms(bspTree, allRooms)
-
-	for i = 1, numConnections do
-		if #allRooms < 2 then
-			break
-		end
-
-		local room1 = allRooms[rng:random(#allRooms)]
-		local room2 = allRooms[rng:random(#allRooms)]
-
-		if room1 ~= room2 then
-			self:createLShapedCorridor(room1, room2, builder, rng)
-		end
-	end
 end
 
 return BspGenerator

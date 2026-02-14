@@ -1,4 +1,4 @@
-prism.registerActor("Leather Armour", function()
+prism.registerActor("LeatherArmour", function()
 	return prism.Actor.fromComponents({
 		prism.components.Name("Leather Armour"),
 		prism.components.Drawable({

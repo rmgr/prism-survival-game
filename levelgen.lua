@@ -2,13 +2,10 @@ local BspGenerator = {}
 BspGenerator.__index = BspGenerator
 
 -- Debug mode: when true, generates a simple test map instead of BSP dungeon
-local DEBUG = false
-local SPAWN_ENEMIES = true
 
 -- Configuration constants
 BspGenerator.MIN_PARTITION_SIZE = 8
 BspGenerator.MAX_DEPTH = 14
-BspGenerator.ROOM_SIZE_MIN = 10
 
 function BspGenerator.new()
 	local self = setmetatable({}, BspGenerator)
