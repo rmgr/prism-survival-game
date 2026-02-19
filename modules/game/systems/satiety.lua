@@ -12,7 +12,10 @@ function SatietySystem:onTurn(level, actor)
 	end
 	if satietyComponent.satiety <= 0 then
 		if actor:has(prism.components.PlayerController) then
-			level:tryPerform(prism.actions.Damage(actor, 1))
+			local health = actor:expect(prism.components.Health)
+			if health.hp > 1 then
+				level:tryPerform(prism.actions.Damage(actor, 1))
+			end
 		end
 	end
 end
