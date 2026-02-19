@@ -12,3 +12,10 @@ prism.registerActor("SalamanderNest", function()
 		prism.components.SalamanderNest(),
 	})
 end)
+prism.registerActor("OlmNest", function()
+	return prism.Actor.fromComponents({
+		prism.components.Name("OlmNest"),
+		prism.components.Position(),
+		prism.components.OlmNest(),
+	})
+end)

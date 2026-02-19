@@ -58,12 +58,14 @@ function Cavern:generate(generatorInfo, player, rng)
 
 	self:connectSiblings(bspTree, builder, rng)
 	for i = 1, 5 do
-		local room = RoomManager.roomGraph.rooms[rng:random(1, #RoomManager.roomGraph.rooms)]
-		local rect = prism.Rectangle(room.x, room.y, room.w, room.h)
-		local corners = rect:toCorners()
-		local attempts = 0
+		prism.decorators.OlmNestDecorator.tryDecorate(
+			generatorInfo,
+			rng,
+			builder,
+			RoomManager.roomGraph.rooms[rng:random(1, #RoomManager.roomGraph.rooms)]
+		)
 
-		while attempts < 4 do
+		--[[	while attempts < 4 do
 			local randCorner = corners[rng:random(1, #corners)]
 			local x, y = randCorner:decompose()
 			local cell = builder:get(x, y)
@@ -77,7 +79,7 @@ function Cavern:generate(generatorInfo, player, rng)
 				end
 			end
 			attempts = attempts + 1
-		end
+		end]]
 	end
 
 	local room = RoomManager.roomGraph.rooms[rng:random(

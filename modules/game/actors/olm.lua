@@ -1,3 +1,4 @@
+prism.register(prism.Component:extend("OlmNest"))
 prism.register(prism.Component:extend("Olm"))
 prism.registerActor("Olm", function()
 	return prism.Actor.fromComponents({
@@ -20,6 +21,11 @@ prism.registerActor("Olm", function()
 				-- Hunt Subroutine (only actual foes)
 				prism.behaviours.HuntSubroutine(15, 1, 16),
 			}),
+			prism.BehaviorTree.Sequence({
+				--	prism.behaviours.FindNearestRoomNotContainingEnemyBehaviour(),
+				prism.behaviours.FindHomeBehaviour(),
+				prism.behaviours.MoveBehaviour(),
+			}),
 			prism.behaviours.WaitBehaviour(),
 		})),
 		prism.components.Health(200),
@@ -30,7 +36,8 @@ prism.registerActor("Olm", function()
 			entry = prism.actors.MeatBrick(),
 		}),
 		prism.components.Olm(),
-		prism.components.Speed(50),
+		prism.components.Speed(75),
 		prism.components.Satiety(1000),
+		prism.components.Nesting(prism.components.OlmNest),
 	})
 end)
