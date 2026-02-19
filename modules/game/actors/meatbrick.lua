@@ -7,7 +7,7 @@ prism.registerActor("MeatBrick", function()
 			stackable = "MeatBrick",
 			stackLimit = 99,
 		}),
-		prism.components.Edible(1, 50),
+		prism.components.Edible(20, 50),
 		prism.components.Description(
 			"A big ol' brick of meat. Are any of us really men made of anything else but meat?"
 		),

@@ -22,7 +22,10 @@ function SpitFire:perform(level, attacked)
 
 	local attackName = Name.lower(attacked)
 	local ownerName = Name.lower(self.owner)
-
+	level:yield(prism.messages.AnimationMessage({
+		animation = spectrum.animations.Burn(),
+		actor = attacked,
+	}))
 	--[[
 	level:yield(prism.messages.AnimationMessage({
 		animation = spectrum.animations.SpitFire(self.owner, attacked:getPosition()),

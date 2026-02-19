@@ -1,3 +1,4 @@
+prism.register(prism.Component:extend("SalamanderNest"))
 prism.register(prism.Component:extend("Salamander"))
 prism.registerActor("Salamander", function()
 	return prism.Actor.fromComponents({
@@ -6,7 +7,7 @@ prism.registerActor("Salamander", function()
 		prism.components.Drawable({ index = "S", color = prism.Color4.ORANGE, layer = math.huge - 5 }),
 		prism.components.Collider(),
 		prism.components.Senses(),
-		prism.components.Satiety(150),
+		prism.components.Satiety(300),
 		prism.components.Sight({ range = 12, fov = true }),
 		prism.components.Mover({ "walk" }),
 		prism.components.Smell({ threshold = 20 }),
@@ -16,13 +17,16 @@ prism.registerActor("Salamander", function()
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Selector({
 				-- Hunger Subroutine
-				prism.behaviours.HungerSubroutine(),
+				prism.behaviours.HungerSubroutine(40),
 				-- Flee scary monsters
 				prism.behaviours.FleeOrFireSubroutine(),
 				-- Hunt Subroutine (only actual foes)
 				prism.behaviours.HuntSubroutine(34, 1, 3),
 			}),
-			prism.behaviours.RandomMoveBehaviour(),
+			prism.BehaviorTree.Sequence({
+				prism.behaviours.FindRandomRoomBehaviour(),
+				prism.behaviours.MoveBehaviour(1),
+			}),
 			prism.behaviours.WaitBehaviour(),
 		})),
 		prism.components.Health(30),
@@ -34,5 +38,6 @@ prism.registerActor("Salamander", function()
 			entry = prism.actors.MeatBrick(),
 		}),
 		prism.components.Salamander(),
+		prism.components.Nesting(prism.components.SalamanderNest),
 	})
 end)

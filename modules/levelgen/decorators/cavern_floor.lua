@@ -2,7 +2,6 @@ local util = prism.levelgen.util
 local CavernFloorDecorator = prism.levelgen.Decorator:extend("CavernFloorDecorator")
 
 function CavernFloorDecorator.tryDecorate(generatorInfo, rng, builder, room)
-	print("Cavern FLoor")
 	local noiseOffsetX = rng:random(1, 10000)
 	local noiseOffsetY = rng:random(1, 10000)
 	local noiseScale = 3

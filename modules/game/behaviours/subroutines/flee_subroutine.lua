@@ -10,7 +10,8 @@ function FleeSubroutine:__new()
 					prism.behaviours.MoveBehaviour(),
 				}),
 				prism.BehaviorTree.Sequence({
-					prism.behaviours.FindNearestRoomNotContainingEnemyBehaviour(),
+					--	prism.behaviours.FindNearestRoomNotContainingEnemyBehaviour(),
+					prism.behaviours.FindHomeBehaviour(),
 					prism.behaviours.MoveBehaviour(),
 				}),
 			}),

@@ -6,14 +6,17 @@ prism.registerActor("Axe", function()
 			color = prism.Color4.ORANGE,
 		}),
 		prism.components.Item(),
-		prism.components.Equipment("hand", prism.condition.Condition(prism.modifiers.KnockbackModifier(15))),
+		prism.components.Equipment(
+			"hand",
+			prism.condition.Condition(prism.modifiers.KnockbackModifier(2), prism.modifiers.DamageModifier(5))
+		),
 		prism.components.Position(),
 		prism.components.Description("And my axe!"),
 	})
 end)
-prism.registerActor("Club", function()
+prism.registerActor("LargeBranch", function()
 	return prism.Actor.fromComponents({
-		prism.components.Name("Club"),
+		prism.components.Name("LargeBranch"),
 		prism.components.Drawable({
 			index = "/",
 			color = prism.Color4.BROWN,
@@ -21,7 +24,7 @@ prism.registerActor("Club", function()
 		prism.components.Item(),
 		prism.components.Equipment(
 			"hand",
-			prism.condition.Condition(prism.modifiers.KnockbackModifier(2), prism.modifiers.DamageModifier(10))
+			prism.condition.Condition(prism.modifiers.KnockbackModifier(1), prism.modifiers.DamageModifier(10))
 		),
 		prism.components.Position(),
 		prism.components.Description("Big chunk of wood, good for hitting things."),

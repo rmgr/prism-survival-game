@@ -12,8 +12,11 @@ function ListenBehaviour:run(level, actor, controller)
 		return false
 	end
 
-	local target =
-		senses:query(level, prism.components.Controller):relation(actor, prism.relations.HearsRelation):first()
+	local target = senses
+		:query(level, prism.components.Controller)
+		:relation(actor, prism.relations.HearsRelation)
+		:relation(actor, prism.relations.FoeRelation)
+		:first()
 	if not target then
 		return true
 	end

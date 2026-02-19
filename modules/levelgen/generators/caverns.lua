@@ -5,6 +5,7 @@ local Cavern = prism.levelgen.Generator:extend("Cavern")
 local DEBUG = false
 
 --- @param generatorInfo GeneratorInfo
+--- @param player Actor
 function Cavern:generate(generatorInfo, player, rng)
 	local seed = generatorInfo.seed
 	local w, h = generatorInfo.w, generatorInfo.h
@@ -17,7 +18,6 @@ function Cavern:generate(generatorInfo, player, rng)
 	local visited = {}
 	local stack = { bspTree }
 	local placedPlayer = false
-	local placedLake = false
 
 	-- Fill with walls
 	for x = 1, w do
@@ -45,6 +45,10 @@ function Cavern:generate(generatorInfo, player, rng)
 					if not placedPlayer then
 						builder:addActor(player, room.centerX, room.centerY)
 						placedPlayer = true
+					else
+						if rng:random(1, 2) == 1 then
+							builder:addActor(prism.actors.Beetle(), room.centerX, room.centerY)
+						end
 					end
 					item.room = room
 				end
@@ -53,9 +57,37 @@ function Cavern:generate(generatorInfo, player, rng)
 	end
 
 	self:connectSiblings(bspTree, builder, rng)
+	for i = 1, 5 do
+		local room = RoomManager.roomGraph.rooms[rng:random(1, #RoomManager.roomGraph.rooms)]
+		local rect = prism.Rectangle(room.x, room.y, room.w, room.h)
+		local corners = rect:toCorners()
+		local attempts = 0
+
+		while attempts < 4 do
+			local randCorner = corners[rng:random(1, #corners)]
+			local x, y = randCorner:decompose()
+			local cell = builder:get(x, y)
+			if not cell:has(prism.components.Void) then
+				local path = prism.astar(randCorner, player:getPosition(), function(_x, _y)
+					return builder:get(_x, _y) ~= nil
+				end)
+
+				if #path > 1 then
+					builder:addActor(prism.actors.Olm(), x, y)
+				end
+			end
+			attempts = attempts + 1
+		end
+	end
 
 	local extraConnections = rng:random(6, 10)
 	self:addExtraConnections(bspTree, builder, rng, extraConnections)
+	prism.decorators.SalamanderNestDecorator.tryDecorate(
+		generatorInfo,
+		rng,
+		builder,
+		RoomManager.roomGraph.rooms[rng:random(1, #RoomManager.roomGraph.rooms)]
+	)
 
 	prism.decorators.KoboldNestDecorator.tryDecorate(
 		generatorInfo,
@@ -63,7 +95,6 @@ function Cavern:generate(generatorInfo, player, rng)
 		builder,
 		RoomManager.roomGraph.rooms[rng:random(1, #RoomManager.roomGraph.rooms)]
 	)
-	placedLake = true
 	builder:pad(1, prism.cells.Wall)
 
 	local roomGraph = RoomManager.roomGraph

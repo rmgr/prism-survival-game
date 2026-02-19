@@ -1,5 +1,4 @@
---local hungerSubtree = require("modules.game.subtrees.hunger_subtree")
-
+prism.register(prism.Component:extend("KoboldNest"))
 prism.register(prism.Component:extend("Kobold"))
 prism.registerActor("Kobold", function()
 	return prism.Actor.fromComponents({
@@ -8,7 +7,7 @@ prism.registerActor("Kobold", function()
 		prism.components.Drawable({ index = "k", color = prism.Color4.RED, layer = math.huge - 5 }),
 		prism.components.Collider(),
 		prism.components.Senses(),
-		prism.components.Satiety(250),
+		prism.components.Satiety(500),
 		prism.components.Sight({ range = 12, fov = true }),
 		prism.components.Mover({ "walk" }),
 		prism.components.Smell({ threshold = 20 }),
@@ -17,13 +16,16 @@ prism.registerActor("Kobold", function()
 		prism.components.BTController(prism.BehaviorTree.Root({
 			prism.BehaviorTree.Selector({
 				-- Hunger Subroutine
-				prism.behaviours.HungerSubroutine(),
+				prism.behaviours.HungerSubroutine(40),
 				-- Flee scary monsters
 				prism.behaviours.FleeSubroutine(),
 				-- Hunt Subroutine (only actual foes)
 				prism.behaviours.HuntSubroutine(34, 1),
 			}),
-			prism.behaviours.RandomMoveBehaviour(),
+			prism.BehaviorTree.Sequence({
+				prism.behaviours.FindRandomRoomBehaviour(),
+				prism.behaviours.MoveBehaviour(1),
+			}),
 			prism.behaviours.WaitBehaviour(),
 		})),
 		prism.components.Health(30),
@@ -35,5 +37,6 @@ prism.registerActor("Kobold", function()
 			entry = prism.actors.MeatBrick(),
 		}),
 		prism.components.Kobold(),
+		prism.components.Nesting(prism.components.KoboldNest),
 	})
 end)

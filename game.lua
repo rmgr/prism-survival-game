@@ -6,6 +6,7 @@
 --- @field level Level?
 --- @field player Actor?
 --- @field factions table<string, Actor>
+--- @field debug boolean
 
 --- @overload fun(seed: string): Game
 local Game = prism.Object:extend("Game")
@@ -15,6 +16,7 @@ function Game:__new(seed)
 	self.depth = 0
 	self.rng = prism.RNG(seed)
 	self.player = prism.actors.Player()
+	self.debug = false
 
 	-- Initialize factions once
 	self.factions = {

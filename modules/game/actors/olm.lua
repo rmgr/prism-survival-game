@@ -6,7 +6,7 @@ prism.registerActor("Olm", function()
 		prism.components.Drawable({ index = "O", color = prism.Color4.NAVY }),
 		prism.components.Collider(),
 		prism.components.Senses(),
-		prism.components.Sight({ range = 2, fov = true }),
+		prism.components.Sight({ range = 3, fov = true }),
 		prism.components.Hearing(),
 		prism.components.Mover({ "walk" }),
 		prism.components.Scent({ strength = 20 }),
@@ -18,11 +18,11 @@ prism.registerActor("Olm", function()
 				-- Flee scary monsters
 				prism.behaviours.FleeSubroutine(),
 				-- Hunt Subroutine (only actual foes)
-				prism.behaviours.HuntSubroutine(15, 1),
+				prism.behaviours.HuntSubroutine(15, 1, 16),
 			}),
 			prism.behaviours.WaitBehaviour(),
 		})),
-		prism.components.Health(60),
+		prism.components.Health(200),
 		prism.components.Attacker(50),
 		prism.components.BelongsToFaction({ "OlmFaction" }),
 		prism.components.DropTable({
