@@ -63,9 +63,8 @@ function GameLevelState:handleMessage(message)
 	end
 	if prism.messages.DescendMessage:is(message) then
 		--- @cast message DescendMessage
-		self.manager:enter(
-			spectrum.gamestates.GameLevelState(self.display, Game:generateNextFloor(), Game:getLevelSeed())
-		)
+		local builder, rooms = Game:generateNextFloor()
+		self.manager:enter(spectrum.gamestates.GameLevelState(self.display, builder, rooms, Game:getLevelSeed()))
 	end
 	-- Handle any messages sent to the level state from the level. LevelState
 	-- handles a few built-in messages for you, like the decision you fill out

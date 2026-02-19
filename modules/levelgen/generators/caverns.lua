@@ -80,6 +80,11 @@ function Cavern:generate(generatorInfo, player, rng)
 		end
 	end
 
+	local room = RoomManager.roomGraph.rooms[rng:random(
+		math.floor(#RoomManager.roomGraph.rooms / 2),
+		#RoomManager.roomGraph.rooms
+	)]
+	builder:addActor(prism.actors.Stairs(), room.centerX, room.centerY)
 	local extraConnections = rng:random(6, 10)
 	self:addExtraConnections(bspTree, builder, rng, extraConnections)
 	prism.decorators.SalamanderNestDecorator.tryDecorate(
