@@ -13,8 +13,10 @@ function CavernFloorDecorator.tryDecorate(generatorInfo, rng, builder, room)
 				local noise = love.math.noise(x / noiseScale + noiseOffsetX, y / noiseScale + noiseOffsetY)
 				if noise > noiseThreshold then
 					builder:set(x, y, prism.cells.Floor())
-				elseif noise < noiseThreshold and noise > 0.4 then
+				elseif noise < noiseThreshold and noise > 0.4 and noise < 0.5 then
 					builder:set(x, y, prism.cells.Grass())
+				elseif noise < noiseThreshold and noise > 0.5 then
+					builder:set(x, y, prism.cells.TallGrass())
 				else
 					builder:set(x, y, prism.cells.Gravel())
 				end
