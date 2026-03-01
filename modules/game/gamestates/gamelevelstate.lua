@@ -58,9 +58,14 @@ function GameLevelState:handleMessage(message)
 		self.manager:enter(spectrum.gamestates.GameOverState(self.display))
 	end
 
+	if prism.messages.WinMessage:is(message) then
+		self.manager:enter(spectrum.gamestates.WinState(self.display))
+	end
+
 	if prism.messages.SkipAnimationsMessage:is(message) then
 		self.display:skipAnimations()
 	end
+
 	if prism.messages.DescendMessage:is(message) then
 		--- @cast message DescendMessage
 		local builder, rooms = Game:generateNextFloor()
@@ -89,6 +94,14 @@ function GameLevelState:updateDecision(dt, owner, decision)
 
 		local openContainer = prism.actions.OpenContainer(owner, openable)
 		if self:setAction(openContainer) then
+			return
+		end
+
+		-- Check for stairs, before trying to move
+		local orbTarget = self.level:query(prism.components.OrbOfYendor):at(destination:decompose()):first()
+		if orbTarget then
+			local win = prism.actions.Win(owner)
+			self:setAction(win)
 			return
 		end
 

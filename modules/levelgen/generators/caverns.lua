@@ -86,7 +86,11 @@ function Cavern:generate(generatorInfo, player, rng)
 		math.floor(#RoomManager.roomGraph.rooms / 2),
 		#RoomManager.roomGraph.rooms
 	)]
-	builder:addActor(prism.actors.Stairs(), room.centerX, room.centerY)
+	if depth == 5 then
+		builder:addActor(prism.actors.OrbOfYendor(), room.centerX, room.centerY)
+	else
+		builder:addActor(prism.actors.Stairs(), room.centerX, room.centerY)
+	end
 	local extraConnections = rng:random(6, 10)
 	self:addExtraConnections(bspTree, builder, rng, extraConnections)
 	prism.decorators.SalamanderNestDecorator.tryDecorate(
