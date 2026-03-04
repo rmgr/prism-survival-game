@@ -22,16 +22,18 @@ return spectrum.Input.Controls({
             inventory      = { "i", "button:x", "button:leftshoulder" },
             back           = { "escape", "button:b" },
             pickup         = { "g", "button:rightshoulder" },
-            select         = { "return", "button:a" }
+            select         = { "return", "button:a" },
+            tab            = "tab",
+            select         = "return"
       },
-      -- Pairs are controls that map to either 4 or 8 directions.
-      -- With only 4 directions, the order is up, left, right, down.
-      pairs = {
+	-- Pairs are controls that map to either 4 or 8 directions.
+	-- With only 4 directions, the order is up, left, right, down.
+	pairs = {
             -- stylua: ignore
             move = {
                   "move_upleft", "move_up", "move_upright",
                   "move_left", "move_right",
                   "move_downleft", "move_down", "move_downright"
             },
-      },
+	},
 })

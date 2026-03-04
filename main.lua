@@ -14,6 +14,7 @@ prism.loadModule("prism/extra/inventory")
 prism.loadModule("prism/extra/equipment")
 prism.loadModule("prism/extra/droptable")
 
+prism.loadModule("modules/base")
 prism.loadModule("modules/game")
 prism.loadModule("modules/levelgen")
 
@@ -26,6 +27,7 @@ prism.defaultCell = prism.cells.Pit
 
 -- Load a sprite atlas and configure the terminal-style display,
 love.graphics.setDefaultFilter("nearest", "nearest")
+love.setDeprecationOutput(false)
 local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/wanderlust_16x16.png", 16, 16)
 local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(16, 16))
 
