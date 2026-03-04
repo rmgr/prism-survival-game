@@ -19,12 +19,11 @@ return spectrum.Input.Controls({
             quit           = { "q", "button:start" },
             play           = { "p", "button:a" },
             load           = { "l", "button:y" },
-            inventory      = { "i", "button:x", "button:leftshoulder" },
+            inventory      = { "i", "button:x" },
             back           = { "escape", "button:b" },
             pickup         = { "g", "button:rightshoulder" },
             select         = { "return", "button:a" },
-            tab            = "tab",
-            select         = "return"
+            tab            = { "tab", "button:leftshoulder"},
       },
 	-- Pairs are controls that map to either 4 or 8 directions.
 	-- With only 4 directions, the order is up, left, right, down.
