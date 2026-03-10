@@ -25,7 +25,7 @@ function GeneralTargetHandler:getValidTargets()
 end
 
 function GeneralTargetHandler:setSelectorPosition()
-	if prism.Vector2.is(self.curTarget) then
+	if prism.Vector2:is(self.curTarget) then
 		self.selectorPosition = self.curTarget
 	elseif self.curTarget then
 		self.selectorPosition = self.curTarget:getPosition()

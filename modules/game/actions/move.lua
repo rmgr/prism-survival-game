@@ -31,7 +31,8 @@ function Move:perform(level, destination)
 			volume = sound:getVolume()
 		end
 	end
-	local emitSoundAction = prism.actions.EmitSound(self.owner, volume)
+	local isPlayer = self.owner:has(prism.components.PlayerController)
+	local emitSoundAction = prism.actions.EmitSound(self.owner, volume, isPlayer, isPlayer)
 	level:tryPerform(emitSoundAction)
 	--	level:getSystem(prism.systems.SoundSystem):playSound(level, destination.x, destination.y, volume, self.owner)
 	level:moveActor(self.owner, destination)

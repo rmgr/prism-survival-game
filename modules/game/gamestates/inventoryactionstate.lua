@@ -129,6 +129,7 @@ function InventoryActionState:confirmSelection()
 	self.targets = { self.item }
 
 	for j = action:getNumTargets(), 2, -1 do
+		print(j)
 		self.manager:push(
 			spectrum.gamestates.GeneralTargetHandler(
 				self.display,

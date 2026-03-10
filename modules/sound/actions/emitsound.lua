@@ -1,19 +1,22 @@
 local VolumeTarget = prism.Target():isType("number")
+local SkipAnimationsTarget = prism.Target():isType("boolean")
+local ShowRadiusTarget = prism.Target():isType("boolean")
 ---@class EmitSound : Action
 ---@field volume integer
 ---@overload fun(owner: Actor, volume: integer ): EmitSound
 local EmitSound = prism.Action:extend("EmitSound")
 
-EmitSound.targets = { VolumeTarget }
-function EmitSound:perform(level, volume)
+EmitSound.targets = { VolumeTarget, SkipAnimationsTarget, ShowRadiusTarget }
+function EmitSound:perform(level, volume, skipAnimations, showRadius)
 	local position = self.owner:getPosition()
 	if not position then
 		return
 	end
 	local originX, originY = position:decompose()
-	local isPlayer = self.owner:has(prism.components.PlayerController)
-	if isPlayer then
+	if skipAnimations or false then
 		level:yield(prism.messages.SkipAnimationsMessage())
+	end
+	if showRadius or false then
 		level:yield(prism.messages.AnimationMessage({
 			animation = spectrum.animations.SoundRadiusMarkersExpand(volume, originX, originY),
 			actor = self.owner,
