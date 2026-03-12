@@ -3,6 +3,6 @@ prism.registerCell("Gravel", function()
 		prism.components.Name("Gravel"),
 		prism.components.Drawable({ index = ";", color = prism.Color4.DARKGREY }),
 		prism.components.Collider({ allowedMovetypes = { "walk", "fly" } }),
-		prism.components.Sound(15),
+		prism.components.Sound(10),
 	})
 end)

@@ -49,6 +49,14 @@ function Cavern:generate(generatorInfo, player, rng)
 						if rng:random(1, 2) == 1 then
 							builder:addActor(prism.actors.Beetle(), room.centerX, room.centerY)
 						end
+						if rng:random(1, 3) == 1 then
+							local x = room.centerX + rng:random(-room.w / 2, room.w / 2)
+							local y = room.centerY + rng:random(-room.h / 2, room.h / 2)
+							local cell = builder:get(x, y)
+							if cell and not cell:has(prism.components.Void) then
+								builder:addActor(prism.actors.Rock(), x, y)
+							end
+						end
 					end
 					item.room = room
 				end
@@ -57,29 +65,15 @@ function Cavern:generate(generatorInfo, player, rng)
 	end
 
 	self:connectSiblings(bspTree, builder, rng)
-	for i = 1, 5 do
-		prism.decorators.OlmNestDecorator.tryDecorate(
-			generatorInfo,
-			rng,
-			builder,
-			RoomManager.roomGraph.rooms[rng:random(1, #RoomManager.roomGraph.rooms)]
-		)
-
-		--[[	while attempts < 4 do
-			local randCorner = corners[rng:random(1, #corners)]
-			local x, y = randCorner:decompose()
-			local cell = builder:get(x, y)
-			if not cell:has(prism.components.Void) then
-				local path = prism.astar(randCorner, player:getPosition(), function(_x, _y)
-					return builder:get(_x, _y) ~= nil
-				end)
-
-				if #path > 1 then
-					builder:addActor(prism.actors.Olm(), x, y)
-				end
-			end
-			attempts = attempts + 1
-		end]]
+	if depth > 1 then
+		for _ = 1, 3 do
+			prism.decorators.OlmNestDecorator.tryDecorate(
+				generatorInfo,
+				rng,
+				builder,
+				RoomManager.roomGraph.rooms[rng:random(1, #RoomManager.roomGraph.rooms)]
+			)
+		end
 	end
 
 	local room = RoomManager.roomGraph.rooms[rng:random(

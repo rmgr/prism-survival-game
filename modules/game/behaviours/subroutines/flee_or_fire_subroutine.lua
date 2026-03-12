@@ -6,8 +6,8 @@ function FleeOrFireSubroutine:__new()
 			prism.behaviours.FindFearedBehaviour(),
 			prism.BehaviorTree.Selector({
 				prism.BehaviorTree.Sequence({
-					prism.behaviours.RandomChanceBehaviour(30),
-					prism.behaviours.CheckTargetInRangeBehaviour(3),
+					prism.behaviours.RandomChanceBehaviour(10),
+					prism.behaviours.CheckTargetInRangeBehaviour(2),
 					prism.behaviours.SpitFireBehaviour(),
 				}),
 				prism.BehaviorTree.Sequence({

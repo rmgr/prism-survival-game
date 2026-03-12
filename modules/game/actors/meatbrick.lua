@@ -11,5 +11,6 @@ prism.registerActor("MeatBrick", function()
 		prism.components.Description(
 			"A big ol' brick of meat. Are any of us really men made of anything else but meat?"
 		),
+		prism.components.Throwable(0),
 	})
 end)

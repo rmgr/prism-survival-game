@@ -8,12 +8,13 @@ prism.registerActor("Kobold", function()
 		prism.components.Collider(),
 		prism.components.Senses(),
 		prism.components.Satiety(500),
-		prism.components.Sight({ range = 12, fov = true }),
+		prism.components.Sight({ range = 5, fov = true }),
 		prism.components.Mover({ "walk" }),
 		prism.components.Smell({ threshold = 20 }),
 		prism.components.Hearing(),
 		prism.components.Scent({ strength = 20 }),
 		prism.components.BTController(prism.BehaviorTree.Root({
+			prism.behaviours.ListenBehaviour(),
 			prism.BehaviorTree.Selector({
 				-- Hunger Subroutine
 				prism.behaviours.HungerSubroutine(40),

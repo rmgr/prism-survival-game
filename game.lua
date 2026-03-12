@@ -25,6 +25,7 @@ function Game:__new(seed)
 		OlmFaction = prism.factions.OlmFaction(),
 		BeetleFaction = prism.factions.BeetleFaction(),
 		SalamanderFaction = prism.factions.SalamanderFaction(),
+		FireFaction = prism.factions.FireFaction(),
 	}
 
 	-- Establish initial faction relationships
@@ -40,6 +41,16 @@ function Game:__new(seed)
 	self.factions.BeetleFaction:addRelation(prism.relations.FactionRelationshipRelation(0), self.factions.KoboldFaction)
 	self.factions.PlayerFaction:addRelation(prism.relations.FactionRelationshipRelation(-100), self.factions.OlmFaction)
 	self.factions.OlmFaction:addRelation(prism.relations.FactionRelationshipRelation(-100), self.factions.KoboldFaction)
+	self.factions.OlmFaction:addRelation(
+		prism.relations.FactionRelationshipRelation(-100),
+		self.factions.SalamanderFaction
+	)
+	self.factions.OlmFaction:addRelation(prism.relations.FactionRelationshipRelation(-100), self.factions.OlmFaction)
+	self.factions.OlmFaction:addRelation(prism.relations.FactionRelationshipRelation(-100), self.factions.BeetleFaction)
+
+	for i, faction in ipairs(self.factions) do
+		faction:addRelation(prism.relations.FactionRelationshipRelation(-100, self.factions.FireFaction))
+	end
 end
 
 --- @return string

@@ -27,7 +27,7 @@ function Throw:perform(level, item, target)
 	local x, y = target:decompose()
 	local targetActor = level:query(prism.components.Controller):at(x, y):first()
 	local soundTarget = item
-	if targetActor then
+	if targetActor and throwable.damage > 0 then
 		soundTarget = targetActor
 		local damageAction = prism.actions.Damage(targetActor, throwable.damage)
 		level:tryPerform(damageAction)

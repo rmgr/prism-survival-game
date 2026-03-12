@@ -19,7 +19,7 @@ prism.registerActor("Olm", function()
 				-- Flee scary monsters
 				prism.behaviours.FleeSubroutine(),
 				-- Hunt Subroutine (only actual foes)
-				prism.behaviours.HuntSubroutine(15, 1, 16),
+				prism.behaviours.HuntSubroutine(15, 1, 8),
 			}),
 			prism.BehaviorTree.Sequence({
 				--	prism.behaviours.FindNearestRoomNotContainingEnemyBehaviour(),

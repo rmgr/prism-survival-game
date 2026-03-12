@@ -9,5 +9,6 @@ prism.registerActor("Fire", function()
 		}),
 		prism.components.Position(),
 		prism.components.Fire(),
+		prism.components.BelongsToFaction({ "FireFaction" }),
 	})
 end)
