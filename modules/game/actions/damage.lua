@@ -10,6 +10,12 @@ function Damage:perform(level, damage)
 	local health = self.owner:expect(prism.components.Health)
 	health.hp = health.hp - damage
 	self.dealt = damage
+	if self.owner:has(prism.components.PlayerController) then
+		level:yield(prism.messages.AnimationMessage({
+			animation = spectrum.animations.Hurt(),
+			actor = self.owner,
+		}))
+	end
 	if health.hp <= 0 then
 		level:perform(prism.actions.Die(self.owner))
 	end

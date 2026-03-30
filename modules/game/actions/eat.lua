@@ -29,7 +29,7 @@ function Eat:perform(level, food, food2)
 
 	local satiety = self.owner:get(prism.components.Satiety)
 	if satiety then
-		satiety.satiety = satiety.satiety + edible.satiety
+		satiety:updateSatiety(satiety.satiety + edible.satiety)
 	end
 
 	local inventory = self.owner:get(prism.components.Inventory)

@@ -10,10 +10,15 @@ prism.registerActor("Beetle", function()
 		prism.components.Mover({ "walk" }),
 		prism.components.Hearing(),
 		prism.components.BTController(prism.BehaviorTree.Root({
+			prism.behaviours.ListenBehaviour(),
 			prism.BehaviorTree.Selector({
-				prism.behaviours.RandomMoveBehaviour(),
-				prism.behaviours.WaitBehaviour(),
+				-- Flee scary monsters
+				prism.behaviours.FleeSubroutine(),
+				-- Hunt Subroutine (only actual foes)
+				prism.behaviours.HuntSubroutine(15, 1, 100),
 			}),
+			prism.behaviours.RandomMoveBehaviour(),
+			prism.behaviours.WaitBehaviour(),
 		})),
 		prism.components.Health(30),
 		prism.components.Attacker(10),

@@ -60,6 +60,29 @@ function Attack:perform(level, attacked)
 	level:yield(prism.messages.AnimationMessage({
 		animation = spectrum.animations.Attack(self.owner, attacked:getPosition()),
 	}))
+
+	local attackerFactionComponent = self.owner:get(prism.components.BelongsToFaction)
+	local attackedFactionComponent = attacked:get(prism.components.BelongsToFaction)
+	local attackerFactions = nil
+	local attackedFactions = nil
+	if attackerFactionComponent then
+		attackerFactions = attackerFactionComponent.factions
+	end
+	if attackedFactionComponent then
+		attackedFactions = attackedFactionComponent.factions
+	end
+	if not attackerFactionComponent and self.owner:has(prism.components.PlayerController) then
+		attackerFactions = { "PlayerFaction" }
+	end
+	if attackerFactions and attackedFactions then
+		for _, attackerFaction in ipairs(attackerFactions) do
+			for _, attackedFaction in ipairs(attackedFactions) do
+				local changeFactionRelationshipAction =
+					prism.actions.ChangeFactionRelationship(attacked, attackedFaction, attackerFaction, -1)
+				level:tryPerform(changeFactionRelationshipAction)
+			end
+		end
+	end
 	Log.addMessage(self.owner, "You attack the %s for %i damage!", attackName, dealt)
 	Log.addMessage(attacked, "The %s attacks you for %i damage!", ownerName, dealt)
 	Log.addMessageSensed(level, self, "The %s attacks the %s for %i damage!", ownerName, attackName, dealt)
